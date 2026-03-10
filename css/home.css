@@ -1,0 +1,599 @@
+/* home.css */
+/* ================================================================
+   HOME PAGE - MODERN REDESIGN (Integrates with base.css)
+================================================================ */
+
+/* ── Typography & Headers ────────────────────────────────────── */
+.rw-section-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+
+.rw-section-title {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.rw-section-sub {
+  font-size: 1.1rem;
+  color: var(--text-mid);
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ── Badges ──────────────────────────────────────────────────── */
+.rw-badge {
+  display: inline-block;
+  background: rgba(34, 56, 145, 0.1); /* Matches --brand-blue */
+  color: var(--brand-blue);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border-radius: 50px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(4px);
+}
+.rw-badge--light {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+.rw-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: var(--transition); /* Using base.css variable */
+}
+.rw-btn--primary {
+  background: var(--brand-orange);
+  color: var(--white);
+}
+.rw-btn--ghost {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+}
+.rw-btn--light {
+  background: var(--white);
+  color: var(--brand-blue);
+}
+.rw-btn--outline {
+  background: transparent;
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+.rw-btn--outline:hover {
+  background: var(--white);
+  color: var(--brand-blue);
+}
+.rw-btn--lg {
+  padding: 16px 40px;
+  font-size: 1.05rem;
+}
+
+/* ── HERO ────────────────────────────────────────────────────── */
+.rw-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  padding-bottom: 60px; /* Space for floating stats */
+  
+}
+.rw-hero__bg {
+  position: absolute;
+  inset: 0;
+  background: url('../images/cover3.jpeg') center / cover no-repeat;
+  z-index: 0;
+}
+.rw-hero__overlay {
+  position: absolute;
+  inset: 0;
+  /* Uses your brand colors for the gradient */
+  background: linear-gradient(160deg, rgba(20, 38, 110, 0.9) 0%, rgba(34, 56, 145, 0.6) 50%, rgba(248, 158, 69, 0.3) 100%);
+  z-index: 1;
+}
+.rw-hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  padding: 48px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+  margin: 30px;
+}
+.rw-hero__title {
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+.rw-hero__title span {
+  font-style: italic;
+  color: var(--brand-orange);
+}
+.rw-hero__sub {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 500px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+}
+.rw-hero__cta {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.rw-scroll-indicator {
+  position: absolute;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+.rw-scroll-indicator span {
+  display: block;
+  width: 22px;
+  height: 36px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  position: relative;
+}
+.rw-scroll-indicator span::after {
+  content: "";
+  display: block;
+  width: 4px;
+  height: 6px;
+  background: var(--white);
+  border-radius: 2px;
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: rw-scroll-dot 1.5s ease-in-out infinite;
+}
+
+/* ── STATS (Floating Bridge) ─────────────────────────────────── */
+.rw-stats {
+  position: relative;
+  z-index: 10;
+  margin-top: -80px; 
+}
+.rw-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 32px 0;
+}
+.rw-stat {
+  text-align: center;
+  padding: 0 24px;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+.rw-stat:last-child { border-right: none; }
+.rw-stat h3 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--brand-blue);
+  margin-bottom: 4px;
+}
+.rw-stat p {
+  font-size: 0.8rem;
+  color: var(--text-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ── PROGRAMS ────────────────────────────────────────────────── */
+.rw-programs {
+  padding: 120px 0 80px;
+}
+.rw-programs__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.rw-program-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0,0,0,0.03);
+}
+.rw-program-card__img-wrapper {
+  overflow: hidden;
+  height: 220px;
+}
+.rw-program-card__img {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.rw-program-card__body {
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.rw-program-card__body h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+.rw-program-card__body p {
+  font-size: 0.9rem;
+  color: var(--text-mid);
+  flex: 1;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+.rw-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--brand-orange);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.rw-link span {
+  transition: transform 0.3s ease;
+}
+
+/* ── EXPERIENCE STRIP ────────────────────────────────────────── */
+.rw-experience {
+  position: relative;
+  padding: 80px 24px;
+  text-align: center;
+  overflow: hidden;
+}
+.rw-experience__bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--brand-orange) 0%, #ffad66 100%);
+  transform: skewY(-2deg);
+  transform-origin: top left;
+  z-index: 0;
+}
+.rw-experience__content {
+  position: relative;
+  z-index: 1;
+}
+.rw-experience__content h2 {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 12px;
+}
+.rw-experience__content p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  margin-bottom: 32px;
+}
+
+/* ── WHY ROWIN ───────────────────────────────────────────────── */
+.rw-why {
+  padding: 120px 0;
+}
+.rw-why__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.rw-why__image-wrapper {
+  position: relative;
+}
+.rw-why__shape {
+  position: absolute;
+  inset: -20px;
+  background: var(--brand-orange);
+  border-radius: var(--radius-xl);
+  opacity: 0.1;
+  z-index: 0;
+  transform: rotate(-3deg);
+}
+.rw-why__image {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+.rw-why__content .rw-section-title { text-align: left; }
+.rw-why__content > p {
+  font-size: 1.05rem;
+  color: var(--text-mid);
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+.rw-why__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.rw-why__list li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  padding: 16px;
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.02);
+}
+.rw-why__list .icon {
+  background: rgba(248, 158, 69, 0.15); /* Orange low opacity */
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 1.2rem;
+}
+
+/* ── TESTIMONIALS ────────────────────────────────────────────── */
+.rw-testimonials {
+  background: var(--brand-blue);
+  padding: 120px 0;
+}
+.rw-testimonials .rw-section-title { color: var(--white); }
+.rw-testimonials__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.rw-testimonial {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  padding: 40px 32px;
+  backdrop-filter: blur(12px);
+}
+.rw-stars {
+  color: var(--brand-orange);
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+  letter-spacing: 2px;
+}
+.rw-testimonial p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  line-height: 1.7;
+  font-style: italic;
+  margin-bottom: 24px;
+}
+.rw-testimonial strong {
+  color: var(--white);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* ── FINAL CTA ───────────────────────────────────────────────── */
+.rw-final-cta {
+  padding: 120px 24px;
+}
+.rw-final-cta__box {
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 80px 24px;
+  text-align: center;
+  background: linear-gradient(rgba(20, 38, 110, 0.9), rgba(34, 56, 145, 0.95)), url('images/team.JPG') center / cover no-repeat;
+  box-shadow: var(--shadow-card);
+}
+.rw-final-cta h2 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  color: var(--white);
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+.rw-final-cta p {
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 40px;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .rw-programs__grid { grid-template-columns: repeat(2, 1fr); }
+  .rw-stats__grid { grid-template-columns: repeat(2, 1fr); padding: 24px 0; }
+  .rw-stat { border-bottom: 1px solid rgba(0,0,0,0.05); padding: 16px 24px; }
+  .rw-stat:nth-child(even) { border-right: none; }
+  .rw-stat:nth-last-child(-n+2) { border-bottom: none; }
+}
+
+@media (max-width: 900px) {
+  .rw-why__grid { grid-template-columns: 1fr; gap: 48px; }
+  .rw-why__image-wrapper { order: 2; max-width: 600px; margin: 0 auto; }
+  .rw-why__content { order: 1; text-align: center; }
+  .rw-why__content .rw-section-title { text-align: center; }
+  .rw-why__list { text-align: left; }
+  .rw-testimonials__grid { grid-template-columns: 1fr; gap: 20px; }
+}
+
+@media (max-width: 768px) {
+  .rw-hero__content { padding: 32px 20px; border-radius: var(--radius-lg); margin: 0 16px; }
+  .rw-hero__title { font-size: 2.5rem; }
+  .rw-hero__cta { flex-direction: column; width: 100%; }
+  .rw-hero__cta .rw-btn { width: 100%; }
+  
+  .rw-programs__grid { grid-template-columns: 1fr; }
+  .rw-experience { padding: 64px 20px; }
+  .rw-experience .rw-btn { width: 100%; }
+  
+  .rw-final-cta__box { padding: 56px 20px; border-radius: var(--radius-lg); }
+  .rw-final-cta .rw-hero__cta { flex-direction: column; }
+}
+
+@media (max-width: 480px) {
+  .rw-stats__grid { grid-template-columns: 1fr; }
+  .rw-stat { border-right: none !important; }
+}
+
+  /* ── Story Section ─────────────────────────────────────── */
+    .rw-story-img-wrapper {
+      position: relative;
+    }
+    .rw-story-img-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: -16px;
+      background: rgba(248,158,69,.1);
+      border-radius: 12px;
+      transform: rotate(-3deg);
+      z-index: 0;
+    }
+    .rw-story-img-wrapper img {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+    }
+
+    /* ── Value Cards ───────────────────────────────────────── */
+    .rw-value-card {
+      background: var(--white);
+      border-radius: var(--radius-card);
+      padding: 40px 24px;
+      text-align: center;
+      transition: var(--transition);
+      border: 1px solid rgba(0,0,0,.03);
+    }
+    .rw-value-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 60px rgba(34,56,145,.1);
+    }
+    .rw-value-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(248,158,69,.1);
+      color: var(--brand-orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      border-radius: 16px;
+      margin: 0 auto 24px;
+    }
+
+    /* ── Coach Cards ───────────────────────────────────────── */
+    .rw-coach-card {
+      background: var(--white);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      display: flex;
+      box-shadow: 0 4px 20px rgba(0,0,0,.05);
+      transition: var(--transition);
+    }
+    .rw-coach-card:hover {
+      box-shadow: 0 10px 30px rgba(0,0,0,.1);
+    }
+    .rw-coach-img {
+      width: 40%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .rw-coach-body {
+      padding: 40px;
+      width: 60%;
+    }
+    .rw-coach-role {
+      color: var(--brand-orange);
+      font-weight: 600;
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 16px;
+    }
+
+    /* ── Support Team Avatar Cards ─────────────────────────── */
+    .rw-team-card {
+      background: var(--white);
+      border-radius: var(--radius-card);
+      padding: 40px 24px;
+      text-align: center;
+      transition: var(--transition);
+      border: 1px solid rgba(0,0,0,.03);
+    }
+    .rw-team-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 60px rgba(34,56,145,.1);
+    }
+    .rw-team-avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--white);
+      box-shadow: 0 4px 12px rgba(0,0,0,.12);
+      margin: 0 auto 24px;
+      display: block;
+    }
+
+    /* ── Final CTA ─────────────────────────────────────────── */
+    .rw-final-cta-inner {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      padding: 80px 32px;
+      text-align: center;
+      background:
+        linear-gradient(rgba(20,38,110,.9), rgba(34,56,145,.95)),
+        url('images/team.JPG') center/cover no-repeat;
+    }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 767.98px) {
+      .rw-stats__grid { grid-template-columns: repeat(2, 1fr); }
+      .rw-stat:nth-child(2) { border-right: none; }
+      .rw-stat { padding: 16px; }
+      .rw-coach-card { flex-direction: column !important; }
+      .rw-coach-img { width: 100%; height: 260px; }
+      .rw-coach-body { width: 100%; padding: 28px; }
+      .rw-hero__content { padding: 28px 20px; }
+    }

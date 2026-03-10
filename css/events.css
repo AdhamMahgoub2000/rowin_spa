@@ -1,0 +1,107 @@
+.rw-hero {
+        position: relative;
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        background:
+          linear-gradient(rgba(20, 38, 110, 0.4), rgba(20, 38, 110, 0.4)),
+          url("https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2040&auto=format&fit=crop")
+            center/cover no-repeat;
+        color: white;
+      }
+
+      .rw-glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: var(--radius-xl);
+        padding: 3rem;
+        margin: 100px 14px;
+      }
+
+      .rw-badge {
+        display: inline-block;
+        padding: 0.5rem 1.25rem;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 1.5rem;
+      }
+
+      .rw-badge-primary {
+        background: rgba(34, 56, 145, 0.1);
+        color: var(--brand-blue);
+      }
+      .rw-badge-light {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      .btn-brand-orange {
+        background-color: var(--brand-orange);
+        color: white;
+        border-radius: 50px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        border: none;
+        transition: 0.3s;
+      }
+      .btn-brand-orange:hover {
+        background-color: #e68a3d;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .btn-outline-white {
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        color: white;
+        border-radius: 50px;
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        transition: 0.3s;
+      }
+      .btn-outline-white:hover {
+        background: white;
+        color: var(--brand-blue);
+      }
+
+      .rw-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        border: none;
+        box-shadow: var(--shadow-card);
+        overflow: hidden;
+        transition: 0.3s;
+      }
+      .rw-card:hover {
+        transform: translateY(-10px);
+      }
+
+      .rw-split-img {
+        border-radius: var(--radius-lg);
+        width: 100%;
+        height: 450px;
+        object-fit: cover;
+        box-shadow: var(--shadow-card);
+      }
+
+      .text-orange {
+        color: var(--brand-orange);
+      }
+      .text-brand-blue {
+        color: var(--brand-blue);
+      }
+
+      /* Scroll Reveal */
+      [data-rw-reveal] {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: 0.8s ease-out;
+      }
+      .rw-revealed {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+      }

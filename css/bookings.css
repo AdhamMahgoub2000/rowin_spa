@@ -1,0 +1,196 @@
+/* ================================================================
+   BOOKINGS PAGE — multi-step form
+   ================================================================ */
+
+.booking-section { padding: 60px 16px; min-height: 70vh; }
+
+.booking-card {
+  border-radius: 15px;
+  padding: 40px;
+  background: white;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+.booking-title { font-weight: 700; margin-bottom: 30px; text-align: center; }
+
+/* ── Stage animation ─────────────────────────────────────────── */
+.booking-stages-container { position: relative; min-height: 500px; overflow: hidden; }
+.booking-stage {
+  position: absolute;
+  width: 100%;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+.booking-stage.active { position: relative; opacity: 1; transform: translateX(0); pointer-events: all; }
+.booking-stage.slide-out-left { transform: translateX(-100%); opacity: 0; }
+
+/* ── Stage indicator dots ────────────────────────────────────── */
+.stage-indicator { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; }
+.stage-dot { width: 12px; height: 12px; border-radius: 50%; background: #e0e0e0; transition: all 0.3s ease; }
+.stage-dot.active   { background: #2563eb; transform: scale(1.3); }
+.stage-dot.completed { background: #10b981; }
+
+/* ── Nav buttons ─────────────────────────────────────────────── */
+.btn-book, .btn-next, .btn-back {
+  background-color: #2563eb;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-weight: 500;
+  color: white;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+}
+.btn-book:hover, .btn-next:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3); }
+.btn-back { background-color: #6b7280; margin-right: 10px; }
+.btn-back:hover { background-color: #4b5563; transform: translateY(-3px); }
+.btn-group-nav { display: flex; justify-content: space-between; margin-top: 30px; }
+
+/* ── Sport options ───────────────────────────────────────────── */
+.sport-option {
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: white;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+.sport-option > input[type="radio"] { margin-top: 2px; }
+.sport-option:hover, .sport-option.selected {
+  border-color: #2563eb;
+  background: linear-gradient(135deg, #eff6ff, #f0f7ff);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.12);
+}
+.sport-option input[type="radio"] { width: 20px; height: 20px; cursor: pointer; accent-color: #2563eb; }
+.sport-option label {
+  cursor: pointer; flex: 1; margin: 0;
+  font-size: 16px; font-weight: 600; color: #1f2937;
+  display: flex; align-items: flex-start; gap: 12px; width: 100%;
+}
+
+/* ── Rowing level pills ──────────────────────────────────────── */
+.level-options { display: none; animation: slideDown 0.3s ease; }
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.level-options.show {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 2px solid #e5e7eb;
+  margin-top: 16px;
+}
+.level-option { margin: 0; }
+.level-option input[type="radio"] { display: none; }
+.level-option label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: white;
+  border: 2px solid #e5e7eb;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: capitalize;
+}
+.level-option label:hover { border-color: #2563eb; color: #2563eb; transform: translateY(-2px); }
+.level-option input[type="radio"]:checked + label { background: #2563eb; border-color: #2563eb; color: white; }
+
+/* ── Quantity ────────────────────────────────────────────────── */
+.quantity-btn {
+  transition: all 0.2s ease;
+  border: 2px solid #e5e7eb;
+  cursor: pointer;
+}
+.quantity-btn:hover { background: #2563eb; border-color: #2563eb; color: white; transform: scale(1.05); }
+.quantity-input { max-width: 150px; }
+
+/* ── Time slots ──────────────────────────────────────────────── */
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+.time-slot {
+  padding: 15px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+}
+.time-slot:hover  { border-color: #2563eb; background: #f0f7ff; }
+.time-slot.selected { border-color: #2563eb; background: #2563eb; color: white; }
+.time-slot.disabled { opacity: 0.5; cursor: not-allowed; background: #f3f4f6; }
+
+/* ── Payment methods ─────────────────────────────────────────── */
+.payment-method {
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.payment-method:hover, .payment-method.selected { border-color: #2563eb; background: #eff6ff; }
+.payment-method input[type="radio"] { margin-right: 10px; }
+
+/* ── File upload ─────────────────────────────────────────────── */
+.file-upload-area {
+  border: 2px dashed #d1d5db;
+  border-radius: 10px;
+  padding: 30px;
+  text-align: center;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.file-upload-area:hover { border-color: #2563eb; background: #f9fafb; }
+.file-upload-area.has-file { border-color: #10b981; background: #f0fdf4; }
+.file-upload-area input[type="file"] { display: none; }
+.file-name { margin-top: 10px; color: #10b981; font-weight: 500; }
+
+/* ── Booking summary ─────────────────────────────────────────── */
+.booking-summary { background: #f9fafb; border-radius: 10px; padding: 20px; margin-bottom: 30px; }
+.summary-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e5e7eb; }
+.summary-item:last-child { border-bottom: none; }
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .booking-section { padding: 32px 12px !important; }
+  .booking-card { padding: 24px 16px !important; border-radius: 16px !important; }
+  .booking-title { font-size: 1.4rem !important; }
+  .sport-option { padding: 14px 16px !important; }
+  .level-option label { padding: 8px 14px !important; font-size: 0.85rem !important; }
+  .time-slots { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+  .time-slot { padding: 10px 8px !important; font-size: 0.85rem !important; }
+  .booking-summary { padding: 16px !important; }
+  .summary-item { font-size: 0.9rem !important; }
+  .btn-group-nav { gap: 10px; flex-direction: column; }
+  .btn-back { margin-right: 0; margin-bottom: 10px; }
+  .btn-back, .btn-next, .btn-book { padding: 12px 20px !important; font-size: 0.9rem !important; }
+  .payment-method { padding: 14px 16px !important; }
+}
+@media (max-width: 480px) {
+  .booking-section { padding: 24px 8px !important; }
+  .booking-card { padding: 20px 14px !important; }
+  .time-slots { grid-template-columns: 1fr 1fr !important; }
+  .stage-indicator { gap: 6px !important; }
+}

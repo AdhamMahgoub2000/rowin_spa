@@ -1,0 +1,330 @@
+<div class="dashboard-layout d-flex">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content with-sidebar flex-grow-1">
+
+
+    <!-- Hero -->
+    <section class="customers-hero">      
+      <button class="hamburger-btn" ng-click="$emit('toggleSidebar')">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <div class="customers-hero-content">
+        <div class="customers-hero-icon">
+          <span class="material-symbols-outlined">contact_support</span>
+        </div>
+
+        <div>
+          <h1 class="customers-hero-title">Contact Requests</h1>
+          <p class="customers-hero-sub">
+            Review and respond to messages sent by customers.
+          </p>
+        </div>
+
+        <div class="customers-hero-stats ms-auto d-none d-md-flex gap-4">
+          <div class="hero-stat">
+            <span class="hero-stat-num">{{ stats.total }}</span>
+            <span class="hero-stat-label">Total</span>
+          </div>
+
+          <div class="hero-stat">
+            <span class="hero-stat-num">{{ stats.high }}</span>
+            <span class="hero-stat-label">High Priority</span>
+          </div>
+
+          <div class="hero-stat">
+            <span class="hero-stat-num">{{ stats.medium }}</span>
+            <span class="hero-stat-label">Medium</span>
+          </div>
+
+          <div class="hero-stat">
+            <span class="hero-stat-num">{{ stats.low }}</span>
+            <span class="hero-stat-label">Low</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Toolbar -->
+    <section class="customers-toolbar">
+      <div class="customers-search-wrap">
+        <span class="material-symbols-outlined csearch-icon">search</span>
+
+        <input
+          class="customers-search"
+          type="text"
+          placeholder="Search by name, email or subject..."
+          ng-model="search"
+          ng-change="applyFilters()"
+        />
+      </div>
+
+      <div class="customers-filters d-flex gap-2 flex-wrap">
+        <button
+          class="cfilter-btn"
+          ng-class="{active: priorityFilter==='all'}"
+          ng-click="setPriority('all')"
+        >
+          All
+        </button>
+
+        <button
+          class="cfilter-btn"
+          ng-class="{active: priorityFilter==='high'}"
+          ng-click="setPriority('high')"
+        >
+          High
+        </button>
+
+        <button
+          class="cfilter-btn"
+          ng-class="{active: priorityFilter==='medium'}"
+          ng-click="setPriority('medium')"
+        >
+          Medium
+        </button>
+
+        <button
+          class="cfilter-btn"
+          ng-class="{active: priorityFilter==='low'}"
+          ng-click="setPriority('low')"
+        >
+          Low
+        </button>
+      </div>
+    </section>
+
+    <!-- Loading -->
+    <div ng-if="loading" class="customers-loading">
+      <div class="cspinner"></div>
+      <p>Loading contact requests…</p>
+    </div>
+
+    <!-- Error -->
+    <div ng-if="error" class="customers-error">
+      <span class="material-symbols-outlined">error</span>
+      {{ error }}
+    </div>
+
+    <!-- Requests List -->
+    <section class="customers-list" ng-if="!loading && filtered.length">
+      <div
+        class="ccard"
+        ng-repeat="req in filtered track by req.id"
+        ng-click="openRequest(req)"
+      >
+        <!-- Avatar -->
+        <div class="ccard-avatar" ng-class="'avatar-color-' + ($index % 6)">
+          {{ req.name.charAt(0).toUpperCase() }}
+        </div>
+
+        <!-- Info -->
+        <div class="ccard-info">
+          <div class="ccard-name">{{ req.name }}</div>
+
+          <div class="ccard-email">{{ req.email }}</div>
+
+          <div class="ccard-meta d-flex gap-3 flex-wrap">
+            <span
+              class="ccard-badge"
+              ng-class="{
+                'badge-admin': req.priority==='high',
+                'badge-member': req.priority!=='high'
+              }"
+            >
+              {{ req.priority | uppercase }}
+            </span>
+
+            <span class="ccard-date">
+              <span
+                class="material-symbols-outlined"
+                style="font-size: 13px; vertical-align: -2px"
+              >
+                calendar_today
+              </span>
+              {{ req.created_at | date:'MMM d, yyyy' }}
+            </span>
+
+            <span class="ccard-phone" ng-if="req.number">
+              <span
+                class="material-symbols-outlined"
+                style="font-size: 13px; vertical-align: -2px"
+              >
+                call
+              </span>
+              {{ req.number }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="ccard-actions">
+          <button
+            class="caction-btn"
+            ng-click="$event.stopPropagation(); openRequest(req)"
+            title="View"
+          >
+            <span class="material-symbols-outlined">visibility</span>
+          </button>
+
+          <button
+            class="caction-btn"
+            ng-click="$event.stopPropagation(); openWhatsapp(req.number)"
+            title="Call"
+          >
+            <span class="material-symbols-outlined">phone</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Empty -->
+    <div ng-if="!loading && !filtered.length" class="customers-empty">
+      <span class="material-symbols-outlined customers-empty-icon">
+        inbox
+      </span>
+      <p>No contact requests found.</p>
+      <button
+        class="cfilter-btn active"
+        ng-click="search=''; priorityFilter='all'"
+      >
+        Clear filters
+      </button>
+    </div>
+    <!-- Modal -->
+    <div
+      class="med-modal-overlay"
+      ng-show="showModal"
+      ng-click="closeModal($event)"
+    >
+      <div class="med-modal" style="max-width: 560px">
+        <!-- Modal Header -->
+        <div
+          class="si-modal-header"
+          ng-class="'cr-modal-header-' + selectedRequest.priority"
+        >
+          <div class="d-flex align-items-center gap-3">
+            <div class="si-modal-icon">
+              <span class="material-symbols-outlined">contact_support</span>
+            </div>
+            <div>
+              <p class="si-modal-label">Contact Request</p>
+              <p class="si-modal-id">{{ selectedRequest.name }}</p>
+            </div>
+          </div>
+          <button class="si-modal-close" ng-click="showModal = false">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="med-modal-body">
+          <!-- Customer Info Row -->
+          <div class="row g-3 mb-3">
+            <div class="col-12 col-sm-6">
+              <div class="si-meta-card">
+                <p class="si-meta-label">Customer</p>
+                <div class="d-flex align-items-center gap-2 mt-1">
+                  <div class="si-avatar si-avatar-lg">
+                    {{ selectedRequest.name.charAt(0).toUpperCase() }}
+                  </div>
+                  <div class="min-w-0">
+                    <p class="si-meta-value mb-0">{{ selectedRequest.name }}</p>
+                    <p
+                      class="mb-0"
+                      style="font-size: 0.75rem; color: var(--text-muted)"
+                    >
+                      {{ selectedRequest.email }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-sm-3">
+              <div class="si-meta-card h-100">
+                <p class="si-meta-label">Priority</p>
+                <span
+                  class="cr-priority-badge mt-1 d-inline-flex"
+                  ng-class="'cr-priority-' + selectedRequest.priority"
+                >
+                  {{ selectedRequest.priority | uppercase }}
+                </span>
+              </div>
+            </div>
+            <div class="col-6 col-sm-3">
+              <div class="si-meta-card h-100">
+                <p class="si-meta-label">Date</p>
+                <p class="si-meta-value">
+                  {{ selectedRequest.created_at | date:'MMM d, y' }}
+                </p>
+                <p
+                  class="mb-0"
+                  style="font-size: 0.72rem; color: var(--text-muted)"
+                >
+                  {{ selectedRequest.created_at | date:'h:mm a' }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Detail Rows -->
+          <div class="si-items-card">
+            <p class="si-items-title">Request Details</p>
+
+            <div class="cr-detail-row">
+              <span class="cr-detail-label">
+                <span class="material-symbols-outlined cr-detail-icon"
+                  >subject</span
+                >Subject
+              </span>
+              <span class="cr-detail-value">
+                <span class="si-category-tag"
+                  >{{ subjectLabel(selectedRequest.subject) }}</span
+                >
+              </span>
+            </div>
+            <div class="cr-detail-row" ng-if="selectedRequest.number">
+              <span class="cr-detail-label">
+                <span class="material-symbols-outlined cr-detail-icon"
+                  >phone</span
+                >Phone
+              </span>
+              <span class="cr-detail-value">{{ selectedRequest.number }}</span>
+            </div>
+
+            <div class="cr-detail-row" ng-if="selectedRequest.order_number">
+              <span class="cr-detail-label">
+                <span class="material-symbols-outlined cr-detail-icon"
+                  >receipt</span
+                >Order #
+              </span>
+              <span class="cr-detail-value inv-id"
+                >{{ selectedRequest.order_number }}</span
+              >
+            </div>
+
+            <div class="cr-detail-row cr-detail-message">
+              <span class="cr-detail-label">
+                <span class="material-symbols-outlined cr-detail-icon"
+                  >chat</span
+                >Message
+              </span>
+              <p class="cr-message-text">{{ selectedRequest.description }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="si-modal-footer">
+          <button class="btn-action" ng-click="showModal = false">Close</button>
+          <a
+            class="si-btn-full"
+            style="text-decoration: none"
+            ng-href="mailto:{{ selectedRequest.email }}?subject=Re: {{ subjectLabel(selectedRequest.subject) }}"
+          >
+            > Reply via Email
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,409 @@
+/* ================================================================
+   PROFILE PAGE
+   ================================================================ */
+
+/* ── Hero ── */
+.pf-hero {
+  background: linear-gradient(135deg, #0f172a 0%, #1a2f55 50%, #1335de 100%);
+  padding: 36px 40px 32px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+.pf-hero::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -60px;
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, rgba(37,99,235,.3) 0%, transparent 70%);
+  pointer-events: none;
+}
+.pf-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -50px; left: 25%;
+  width: 220px; height: 220px;
+  background: radial-gradient(circle, rgba(19,53,222,.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.pf-hero-inner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  position: relative;
+  z-index: 1;
+  flex-wrap: wrap;
+}
+
+/* Avatar */
+.pf-avatar {
+  width: 72px; height: 72px;
+  background: linear-gradient(135deg, rgba(37,99,235,.6), rgba(30,64,175,.8));
+  border: 2px solid rgba(255,255,255,.25);
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+  letter-spacing: -1px;
+  backdrop-filter: blur(8px);
+}
+
+/* Identity */
+.pf-identity { flex: 1; min-width: 180px; }
+.pf-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 4px;
+  letter-spacing: -.5px;
+  word-break: break-word;
+}
+.pf-email {
+  font-size: 13.5px;
+  color: #93c5fd;
+  margin: 0 0 10px;
+  word-break: break-all;
+}
+.pf-meta-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+.pf-role-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+.pf-badge-admin  { background: rgba(37,99,235,.35); color: #93c5fd; border: 1px solid rgba(37,99,235,.4); }
+.pf-badge-member { background: rgba(5,150,105,.35); color: #6ee7b7; border: 1px solid rgba(5,150,105,.4); }
+
+.pf-meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: rgba(255,255,255,.7);
+}
+.pf-meta-chip .material-symbols-outlined { font-size: 15px; }
+
+/* Stats */
+.pf-stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+.pf-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 20px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  min-width: 80px;
+  backdrop-filter: blur(6px);
+}
+.pf-stat--accent {
+  background: rgba(245,158,11,.15);
+  border-color: rgba(245,158,11,.3);
+}
+.pf-stat-num {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: white;
+  line-height: 1;
+}
+.pf-stat-label {
+  font-size: 10.5px;
+  color: #93c5fd;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  white-space: nowrap;
+}
+.pf-stat--accent .pf-stat-label { color: #fcd34d; }
+
+/* ── Loading ── */
+.pf-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 40px;
+  gap: 16px;
+  color: #64748b;
+  font-size: 14px;
+}
+.pf-spinner {
+  width: 40px; height: 40px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: pf-spin .7s linear infinite;
+}
+@keyframes pf-spin { to { transform: rotate(360deg); } }
+
+/* ── Body ── */
+.pf-body { padding: 28px 40px 60px; display: flex; flex-direction: column; gap: 24px; }
+
+/* ── Upcoming strip ── */
+.pf-upcoming-strip {
+  background: white;
+  border: 1px solid #e8ecf4;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(15,23,42,.05);
+}
+.pf-strip-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #0f172a, #1e3a5f);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+}
+.pf-strip-header .material-symbols-outlined { font-size: 18px; color: #93c5fd; }
+
+.pf-upcoming-cards {
+  display: flex;
+  flex-direction: column;
+}
+.pf-upcoming-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background .1s;
+}
+.pf-upcoming-card:last-child { border-bottom: none; }
+.pf-upcoming-card:hover { background: #f8fafc; }
+.pf-upcoming-dot {
+  width: 9px; height: 9px;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.pf-upcoming-type { font-size: 14px; font-weight: 600; color: #0f172a; }
+.pf-upcoming-meta { font-size: 12px; color: #64748b; margin-top: 2px; }
+.pf-upcoming-level {
+  margin-left: auto;
+  padding: 3px 10px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ── Section header ── */
+.pf-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.pf-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+.pf-section-title .material-symbols-outlined { font-size: 20px; color: #64748b; }
+.pf-section-count {
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 600;
+  background: #f1f5f9;
+  padding: 4px 12px;
+  border-radius: 50px;
+}
+
+/* ── Sessions grid ── */
+.pf-sessions-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pf-session-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: white;
+  border: 1px solid #e8ecf4;
+  border-radius: 13px;
+  padding: 0 18px 0 0;
+  overflow: hidden;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  animation: pf-slide-in .35s ease both;
+}
+@keyframes pf-slide-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.pf-session-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(15,23,42,.08);
+  border-color: #c7d2e8;
+}
+.pf-session-card--upcoming {
+  border-color: #bfdbfe;
+  background: #fafcff;
+}
+
+/* Colour bar */
+.pf-session-bar {
+  width: 4px;
+  align-self: stretch;
+  flex-shrink: 0;
+  border-radius: 13px 0 0 13px;
+}
+.pf-bar-0 { background: linear-gradient(180deg, #2563eb, #1e40af); }
+.pf-bar-1 { background: linear-gradient(180deg, #059669, #047857); }
+.pf-bar-2 { background: linear-gradient(180deg, #d97706, #b45309); }
+.pf-bar-3 { background: linear-gradient(180deg, #dc2626, #b91c1c); }
+.pf-bar-4 { background: linear-gradient(180deg, #7c3aed, #5b21b6); }
+
+/* Icon */
+.pf-session-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.pf-icon-0 { background: #eff6ff; color: #2563eb; }
+.pf-icon-1 { background: #f0fdf4; color: #059669; }
+.pf-icon-2 { background: #fffbeb; color: #d97706; }
+.pf-icon-3 { background: #fef2f2; color: #dc2626; }
+.pf-icon-4 { background: #f5f3ff; color: #7c3aed; }
+.pf-session-icon .material-symbols-outlined { font-size: 20px; }
+
+/* Info */
+.pf-session-info { flex: 1; min-width: 0; padding: 14px 0; }
+.pf-session-type {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 4px;
+}
+.pf-session-date,
+.pf-session-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 2px;
+}
+.pf-session-date .material-symbols-outlined,
+.pf-session-time .material-symbols-outlined { font-size: 13px; }
+
+/* Right side */
+.pf-session-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.pf-level {
+  padding: 3px 10px;
+  background: #f1f5f9;
+  color: #475569;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.pf-status {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 50px;
+  white-space: nowrap;
+}
+.pf-status--upcoming { background: #eff6ff; color: #1d4ed8; }
+.pf-status--past     { background: #f0fdf4; color: #15803d; }
+
+/* ── Empty state ── */
+.pf-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  text-align: center;
+  gap: 12px;
+  background: white;
+  border: 1px solid #e8ecf4;
+  border-radius: 14px;
+}
+.pf-empty-icon-wrap {
+  width: 64px; height: 64px;
+  background: #f1f5f9;
+  border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+}
+.pf-empty-icon-wrap .material-symbols-outlined { font-size: 32px; color: #94a3b8; }
+.pf-empty-title { font-size: 16px; font-weight: 700; color: #0f172a; margin: 0; }
+.pf-empty-sub   { font-size: 13.5px; color: #64748b; margin: 0; max-width: 300px; }
+.pf-empty-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: box-shadow .2s, transform .2s;
+}
+.pf-empty-cta:hover {
+  box-shadow: 0 6px 18px rgba(37,99,235,.35);
+  transform: translateY(-2px);
+  color: white;
+}
+.pf-empty-cta .material-symbols-outlined { font-size: 18px; }
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+
+@media (max-width: 1024px) {
+  .pf-hero { padding: 28px 24px; }
+  .pf-body { padding: 20px 24px 48px; }
+}
+
+@media (max-width: 768px) {
+  .pf-hero         { padding: 24px 16px; }
+  .pf-hero-inner   { gap: 16px; }
+  .pf-name         { font-size: 1.4rem; }
+  .pf-stats        { margin-left: 0; width: 100%; justify-content: space-between; }
+  .pf-stat         { flex: 1; padding: 10px 12px; min-width: 0; }
+  .pf-stat-num     { font-size: 1.3rem; }
+  .pf-body         { padding: 16px 16px 40px; gap: 16px; }
+
+  .pf-session-card { padding-right: 12px; }
+  .pf-session-right { display: none; } /* hide on mobile for space */
+}
+
+@media (max-width: 480px) {
+  .pf-avatar   { width: 56px; height: 56px; font-size: 1.5rem; }
+  .pf-name     { font-size: 1.2rem; }
+  .pf-stat-label { font-size: 9px; }
+}

@@ -1,0 +1,499 @@
+<div class="dashboard-layout d-flex">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content with-sidebar flex-grow-1">
+    <!-- ── Hero Banner ── -->
+    <section class="bk-hero">
+      <!-- Mobile hamburger -->
+      <div class="p-3 d-lg-none">
+        <button class="hamburger-btn" ng-click="$emit('toggleSidebar')">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+      </div>
+
+      <div class="bk-hero-content">
+        <div class="bk-hero-icon">
+          <span class="material-symbols-outlined">event_note</span>
+        </div>
+        <div class="bk-hero-text">
+          <h1 class="bk-hero-title">Bookings</h1>
+          <p class="bk-hero-sub">
+            View and manage all session bookings, filter by date or time slot,
+            and keep your schedule on track.
+          </p>
+        </div>
+        <div class="bk-hero-stats ms-auto d-none d-lg-flex gap-3">
+          <div class="bk-stat">
+            <span class="bk-stat-num">{{ totalBookings }}</span>
+            <span class="bk-stat-label">Total Bookings</span>
+          </div>
+          <div class="bk-stat">
+            <span class="bk-stat-num">{{ activeMembers }}</span>
+            <span class="bk-stat-label">Unique Members</span>
+          </div>
+          <div class="bk-stat bk-stat-accent">
+            <span class="bk-stat-num">{{ upcomingSessions }}</span>
+            <span class="bk-stat-label">Upcoming</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Filters Panel ── -->
+    <section class="bk-filters-panel">
+      <!-- Search -->
+      <div class="bk-search-wrap">
+        <span class="material-symbols-outlined bk-search-icon">search</span>
+        <input
+          class="bk-search"
+          type="text"
+          ng-model="searchText"
+          ng-change="applyFilters()"
+          placeholder="Search by name, email, or mobile…"
+        />
+        <button
+          class="bk-search-clear"
+          ng-show="searchText"
+          ng-click="searchText=''; applyFilters()"
+        >
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="bk-filters-row">
+        <!-- Date filter -->
+        <div class="bk-filter-group">
+          <label class="bk-filter-label">
+            <span class="material-symbols-outlined">calendar_today</span>
+            Date
+          </label>
+          <input
+            type="date"
+            class="bk-filter-input"
+            ng-model="filterDate"
+            ng-change="applyFilters()"
+          />
+        </div>
+
+        <!-- Time slot filter -->
+        <div class="bk-filter-group">
+          <label class="bk-filter-label">
+            <span class="material-symbols-outlined">schedule</span>
+            Time Slot
+          </label>
+          <select
+            class="bk-filter-input"
+            ng-model="filterTimeSlot"
+            ng-change="applyFilters()"
+          >
+            <option value="">All Time Slots</option>
+            <option value="6:00">6:00 AM</option>
+            <option value="7:15">7:15 AM</option>
+            <option value="8:30">8:30 AM</option>
+            <option value="9:45">9:45 AM</option>
+            <option value="11:00">11:00 AM</option>
+          </select>
+        </div>
+
+        <!-- Quick actions -->
+        <div class="bk-filter-group bk-filter-actions">
+          <label class="bk-filter-label">&nbsp;</label>
+          <div class="d-flex gap-2">
+            <button
+              class="bk-quick-btn"
+              ng-class="{ 'bk-quick-btn--active': showingTomorrow }"
+              ng-click="toggleTomorrowSessions()"
+            >
+              <span class="material-symbols-outlined">wb_sunny</span>
+              Tomorrow
+              <span class="bk-tomorrow-badge" ng-if="tomorrowCount > 0"
+                >{{ tomorrowCount }}</span
+              >
+            </button>
+            <button
+              class="bk-clear-btn"
+              ng-click="clearFilters()"
+              ng-show="searchText || filterDate || filterTimeSlot"
+            >
+              <span class="material-symbols-outlined">filter_list_off</span>
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Loading ── -->
+    <div ng-if="loading" class="bk-loading">
+      <div class="bk-spinner"></div>
+      <p>Loading bookings…</p>
+    </div>
+
+    <!-- ── Slot Tables ── -->
+    <section class="bk-tables-wrap" ng-if="!loading">
+      <!-- 6:00 AM -->
+      <div class="bk-slot-card" ng-show="bookings6am.length > 0">
+        <div class="bk-slot-header bk-slot-header--blue">
+          <div class="bk-slot-header-left">
+            <div class="bk-slot-dot"></div>
+            <span class="material-symbols-outlined bk-slot-icon">alarm</span>
+            <span class="bk-slot-time">6:00 AM</span>
+            <span class="bk-slot-label">Sessions</span>
+          </div>
+          <span class="bk-slot-count">{{ bookings6am.length }}</span>
+        </div>
+        <div class="bk-table-wrap">
+          <table class="bk-table">
+            <thead>
+              <tr>
+                <th class="bk-th-num">#</th>
+                <th>Member Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Session Type</th>
+                <th>Date</th>
+                <th>Level</th>
+                <th class="bk-th-action">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                ng-repeat="booking in bookings6am track by $index"
+                class="bk-tr"
+              >
+                <td class="bk-td-num">{{ $index + 1 }}</td>
+                <td class="bk-td-name">{{ booking.name }}</td>
+                <td class="bk-td-email">{{ booking.email_address }}</td>
+                <td>{{ booking.mobile_number }}</td>
+                <td>
+                  <span class="bk-type-badge">{{ booking.session_type }}</span>
+                </td>
+                <td class="bk-td-date">
+                  {{ booking.session_date | date:'MMM d, y' }}
+                </td>
+                <td><span class="bk-level-badge">{{ booking.level }}</span></td>
+                <td>
+                  <button
+                    class="bk-delete-btn"
+                    ng-click="removeStudent(booking)"
+                    title="Remove booking"
+                  >
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 7:15 AM -->
+      <div class="bk-slot-card" ng-show="bookings715am.length > 0">
+        <div class="bk-slot-header bk-slot-header--green">
+          <div class="bk-slot-header-left">
+            <div class="bk-slot-dot"></div>
+            <span class="material-symbols-outlined bk-slot-icon">alarm</span>
+            <span class="bk-slot-time">7:15 AM</span>
+            <span class="bk-slot-label">Sessions</span>
+          </div>
+          <span class="bk-slot-count">{{ bookings715am.length }}</span>
+        </div>
+        <div class="bk-table-wrap">
+          <table class="bk-table">
+            <thead>
+              <tr>
+                <th class="bk-th-num">#</th>
+                <th>Member Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Session Type</th>
+                <th>Date</th>
+                <th>Level</th>
+                <th class="bk-th-action">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                ng-repeat="booking in bookings715am track by $index"
+                class="bk-tr"
+              >
+                <td class="bk-td-num">{{ $index + 1 }}</td>
+                <td class="bk-td-name">{{ booking.name }}</td>
+                <td class="bk-td-email">{{ booking.email_address }}</td>
+                <td>{{ booking.mobile_number }}</td>
+                <td>
+                  <span class="bk-type-badge">{{ booking.session_type }}</span>
+                </td>
+                <td class="bk-td-date">
+                  {{ booking.session_date | date:'MMM d, y' }}
+                </td>
+                <td><span class="bk-level-badge">{{ booking.level }}</span></td>
+                <td>
+                  <button
+                    class="bk-delete-btn"
+                    ng-click="removeStudent(booking)"
+                    title="Remove booking"
+                  >
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 8:30 AM -->
+      <div class="bk-slot-card" ng-show="bookings830am.length > 0">
+        <div class="bk-slot-header bk-slot-header--amber">
+          <div class="bk-slot-header-left">
+            <div class="bk-slot-dot"></div>
+            <span class="material-symbols-outlined bk-slot-icon">alarm</span>
+            <span class="bk-slot-time">8:30 AM</span>
+            <span class="bk-slot-label">Sessions</span>
+          </div>
+          <span class="bk-slot-count">{{ bookings830am.length }}</span>
+        </div>
+        <div class="bk-table-wrap">
+          <table class="bk-table">
+            <thead>
+              <tr>
+                <th class="bk-th-num">#</th>
+                <th>Member Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Session Type</th>
+                <th>Date</th>
+                <th>Level</th>
+                <th class="bk-th-action">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                ng-repeat="booking in bookings830am track by $index"
+                class="bk-tr"
+              >
+                <td class="bk-td-num">{{ $index + 1 }}</td>
+                <td class="bk-td-name">{{ booking.name }}</td>
+                <td class="bk-td-email">{{ booking.email_address }}</td>
+                <td>{{ booking.mobile_number }}</td>
+                <td>
+                  <span class="bk-type-badge">{{ booking.session_type }}</span>
+                </td>
+                <td class="bk-td-date">
+                  {{ booking.session_date | date:'MMM d, y' }}
+                </td>
+                <td><span class="bk-level-badge">{{ booking.level }}</span></td>
+                <td>
+                  <button
+                    class="bk-delete-btn"
+                    ng-click="removeStudent(booking)"
+                    title="Remove booking"
+                  >
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 9:45 AM -->
+      <div class="bk-slot-card" ng-show="bookings945am.length > 0">
+        <div class="bk-slot-header bk-slot-header--red">
+          <div class="bk-slot-header-left">
+            <div class="bk-slot-dot"></div>
+            <span class="material-symbols-outlined bk-slot-icon">alarm</span>
+            <span class="bk-slot-time">9:45 AM</span>
+            <span class="bk-slot-label">Sessions</span>
+          </div>
+          <span class="bk-slot-count">{{ bookings945am.length }}</span>
+        </div>
+        <div class="bk-table-wrap">
+          <table class="bk-table">
+            <thead>
+              <tr>
+                <th class="bk-th-num">#</th>
+                <th>Member Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Session Type</th>
+                <th>Date</th>
+                <th>Level</th>
+                <th class="bk-th-action">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                ng-repeat="booking in bookings945am track by $index"
+                class="bk-tr"
+              >
+                <td class="bk-td-num">{{ $index + 1 }}</td>
+                <td class="bk-td-name">{{ booking.name }}</td>
+                <td class="bk-td-email">{{ booking.email_address }}</td>
+                <td>{{ booking.mobile_number }}</td>
+                <td>
+                  <span class="bk-type-badge">{{ booking.session_type }}</span>
+                </td>
+                <td class="bk-td-date">
+                  {{ booking.session_date | date:'MMM d, y' }}
+                </td>
+                <td><span class="bk-level-badge">{{ booking.level }}</span></td>
+                <td>
+                  <button
+                    class="bk-delete-btn"
+                    ng-click="removeStudent(booking)"
+                    title="Remove booking"
+                  >
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 11:00 AM -->
+      <div class="bk-slot-card" ng-show="bookings1100am.length > 0">
+        <div class="bk-slot-header bk-slot-header--teal">
+          <div class="bk-slot-header-left">
+            <div class="bk-slot-dot"></div>
+            <span class="material-symbols-outlined bk-slot-icon">alarm</span>
+            <span class="bk-slot-time">11:00 AM</span>
+            <span class="bk-slot-label">Sessions</span>
+          </div>
+          <span class="bk-slot-count">{{ bookings1100am.length }}</span>
+        </div>
+        <div class="bk-table-wrap">
+          <table class="bk-table">
+            <thead>
+              <tr>
+                <th class="bk-th-num">#</th>
+                <th>Member Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Session Type</th>
+                <th>Date</th>
+                <th>Level</th>
+                <th class="bk-th-action">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                ng-repeat="booking in bookings1100am track by $index"
+                class="bk-tr"
+              >
+                <td class="bk-td-num">{{ $index + 1 }}</td>
+                <td class="bk-td-name">{{ booking.name }}</td>
+                <td class="bk-td-email">{{ booking.email_address }}</td>
+                <td>{{ booking.mobile_number }}</td>
+                <td>
+                  <span class="bk-type-badge">{{ booking.session_type }}</span>
+                </td>
+                <td class="bk-td-date">
+                  {{ booking.session_date | date:'MMM d, y' }}
+                </td>
+                <td><span class="bk-level-badge">{{ booking.level }}</span></td>
+                <td>
+                  <button
+                    class="bk-delete-btn"
+                    ng-click="removeStudent(booking)"
+                    title="Remove booking"
+                  >
+                    <span class="material-symbols-outlined">delete</span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div
+        class="bk-empty"
+        ng-show="bookings6am.length === 0 && bookings715am.length === 0 && bookings830am.length === 0 && bookings945am.length === 0 && bookings1100am.length === 0"
+      >
+        <span class="material-symbols-outlined bk-empty-icon">event_busy</span>
+        <p class="bk-empty-title">No bookings found</p>
+        <p class="bk-empty-sub">
+          Try adjusting your filters or check back later.
+        </p>
+        <button
+          class="bk-empty-btn"
+          ng-show="searchText || filterDate || filterTimeSlot"
+          ng-click="clearFilters()"
+        >
+          Clear all filters
+        </button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ── Delete Confirm Modal ── -->
+<div
+  class="bk-modal-overlay"
+  ng-show="showDeleteModal"
+  ng-click="cancelDelete()"
+>
+  <div class="bk-modal" ng-click="$event.stopPropagation()">
+    <div class="bk-modal-header">
+      <div class="bk-modal-icon-wrap">
+        <span class="material-symbols-outlined">delete_forever</span>
+      </div>
+      <div>
+        <h5 class="bk-modal-title">Remove Booking?</h5>
+        <p class="bk-modal-sub">This action cannot be undone.</p>
+      </div>
+      <button class="bk-modal-close" ng-click="cancelDelete()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="bk-modal-body" ng-if="bookingToDelete">
+      <div class="bk-modal-info-row">
+        <span class="material-symbols-outlined">person</span>
+        <span>{{ bookingToDelete.name }}</span>
+      </div>
+      <div class="bk-modal-info-row">
+        <span class="material-symbols-outlined">mail</span>
+        <span>{{ bookingToDelete.email_address }}</span>
+      </div>
+      <div class="bk-modal-info-row">
+        <span class="material-symbols-outlined">schedule</span>
+        <span
+          >{{ bookingToDelete.session_date | date:'EEE, MMM d y' }} · {{
+          bookingToDelete.session_time }}</span
+        >
+      </div>
+    </div>
+    <div class="bk-modal-footer">
+      <button class="bk-modal-btn-cancel" ng-click="cancelDelete()">
+        Cancel
+      </button>
+      <button
+        class="bk-modal-btn-delete"
+        ng-click="confirmDelete()"
+        ng-disabled="deleting"
+      >
+        <span ng-if="deleting" class="bk-spinner-sm"></span>
+        {{ deleting ? 'Removing…' : 'Remove Booking' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Toast Stack ── -->
+<div class="bk-toast-stack">
+  <div
+    ng-repeat="toast in toasts track by $index"
+    class="bk-toast bk-toast-{{ toast.type }}"
+  >
+    <span class="material-symbols-outlined bk-toast-icon">
+      {{ toast.type === 'success' ? 'check_circle' : 'error' }}
+    </span>
+    {{ toast.message }}
+  </div>
+</div>

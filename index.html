@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" ng-app="rowinApp">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Rowin Academy</title>
+    <meta
+      name="description"
+      content="Rowin Academy — Cairo's premier rowing academy. Explore training programs, book sessions, and join our community on the Nile."
+    />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/all.min.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/navbar.css" />
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/home-animations.css" />
+    <link rel="stylesheet" href="css/pages.css" />
+    <link rel="stylesheet" href="css/auth.css" />
+    <link rel="stylesheet" href="css/profile.css" />
+    <link rel="stylesheet" href="css/dashboard.css" />
+    <link rel="stylesheet" href="css/bookings.css" />
+    <link rel="stylesheet" href="css/contact.css" />
+    <link rel="stylesheet" href="css/events.css" />
+    <link rel="stylesheet" href="css/customers.css" />
+    <link rel="stylesheet" href="css/bookings-admin.css" />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Material Symbols (required for sidebar icons) -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+
+    <style>
+      [ng-cloak] {
+        display: none !important;
+      }
+    </style>
+  </head>
+
+  <body ng-cloak>
+    <!-- Navbar: hidden on admin/dashboard routes -->
+    <navbar-directive
+      ng-if="!isAdminRoute"
+    ></navbar-directive>
+    <side-bar-directive ng-if="isAdminRoute"></side-bar-directive>
+
+    <!-- Angular View -->
+    <div ng-view></div>
+
+    <!-- Footer: hidden on admin/dashboard routes -->
+    <footer-directive ng-if="!isAdminRoute"></footer-directive>
+
+    <!-- Core Libraries -->
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-route.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <!-- App Module -->
+    <script src="app.js"></script>
+
+    <!-- Services -->
+    <script src="js/services/supabase.service.js"></script>
+    <script src="js/services/auth.service.js"></script>
+    <script src="js/services/booking.service.js"></script>
+    <script src="js/services/contact.service.js"></script>
+
+    <!-- Directives -->
+    <script src="js/directives/navbarDirective.js"></script>
+    <script src="js/directives/footerDirective.js"></script>
+    <script src="js/directives/sideBarDirective.js"></script>
+
+    <!-- Controllers -->
+    <script src="js/controllers/loginController.js"></script>
+    <script src="js/controllers/home.controller.js"></script>
+    <script src="js/controllers/registerController.js"></script>
+    <script src="js/controllers/bookingController.js"></script>
+    <script src="js/controllers/dashboardController.js"></script>
+    <script src="js/controllers/profileController.js"></script>
+    <script src="js/controllers/ResetPasswordController.js"></script>
+    <script src="js/controllers/ContactController.js"></script>
+    <script src="js/controllers/sidebar.controller.js"></script>
+    <script src="js/controllers/customersController.js"></script>
+    <script src="js/controllers/bookingsAdminController.js"></script>
+    <script src="js/controllers/contact-requests.controller.js"></script>
+
+    <script>
+      window.addEventListener(
+        "scroll",
+        function () {
+          const nav = document.querySelector(".rw-nav");
+          if (nav)
+            nav.classList.toggle("rw-nav--scrolled", window.scrollY > 10);
+        },
+        { passive: true },
+      );
+    </script>
+  </body>
+</html>

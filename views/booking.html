@@ -1,0 +1,224 @@
+<section class="booking-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="booking-card">
+
+            <h2 class="booking-title" id="booking-main-title" ng-show="!success">
+              Book Your Session
+            </h2>
+
+            <!-- Stage Indicator (hidden on success) -->
+            <div class="stage-indicator" ng-show="!success">
+              <div class="stage-dot" ng-class="{'active': currentStage === 1, 'completed': currentStage > 1}">
+              </div>
+              <div class="stage-dot" ng-class="{'active': currentStage === 2, 'completed': currentStage > 2}">
+              </div>
+              <div class="stage-dot" ng-class="{'active': currentStage === 3}">
+              </div>
+            </div>
+
+            <!-- ======== SUCCESS PANEL ======== -->
+            <div class="text-center" ng-show="success" style="padding: 20px 0">
+              <div class="mb-4 mt-2">
+                <i class="fas fa-calendar-check text-success" style="font-size: 5rem"></i>
+              </div>
+              <h3 class="mb-3">Booking Confirmed!</h3>
+              <p class="text-muted">Your session has been successfully booked.</p>
+
+              <!-- Booking Details -->
+              <div class="booking-summary mt-4">
+                <h5 class="mb-3" style="text-align: left">Booking Details</h5>
+                <div class="summary-item">
+                  <span style="text-align: left">Session Type:</span>
+                  <span>{{ bookingData.sport |capitalize}}</span>
+                </div>
+                <div class="summary-item" ng-show="bookingData.sport === 'rowing' && bookingData.level">
+                  <span>Level:</span>
+                  <span>{{ bookingData.level | capitalize }}</span>
+                </div>
+                <div class="summary-item">
+                  <span style="text-align: left">Date:</span>
+                  <span>{{ displayDate() }}</span>
+                </div>
+                <div class="summary-item">
+                  <span style="text-align: left">Time:</span>
+                  <span>{{ bookingData.time }}</span>
+                </div>
+                <div class="summary-item">
+                  <span style="text-align: left">Quantity:</span>
+                  <span>{{ bookingData.quantity }}</span>
+                </div>
+                <div class="summary-item">
+                  <span style="text-align: left">Payment Method:</span>
+                  <span>{{ displayPayment() }}</span>
+                </div>
+              </div>
+
+              <p class="text-muted" style="font-size: 0.9em">
+                A confirmation email has been sent to your email address. You
+                can view the status of your session and manage your schedule
+                in your profile.
+              </p>
+              <div class="mt-4">
+                <a href="#!/profile" class="btn btn-success px-4 me-2">View My Bookings</a>
+                <a href="#!/" class="btn btn-outline-secondary px-4">Back to Home</a>
+              </div>
+            </div>
+
+            <!-- ======== BOOKING FORM ======== -->
+            <form ng-submit="submitBooking()" ng-show="!success" novalidate>
+              <div class="booking-stages-container">
+
+                <!-- ===== STAGE 1: Sport Selection ===== -->
+                <div class="booking-stage" ng-class="{'active': currentStage === 1}">
+                  <h4 class="mb-4">Step 1: Choose Your Sport</h4>
+
+                  <!-- Sport options (ng-repeat) -->
+                  <div class="sport-option d-block" ng-repeat="sport in sports"
+                    ng-class="{'selected': bookingData.sport === sport.value}" ng-click="selectSport(sport.value)">
+                    <div class="d-flex align-items-center gap-3">
+                      <input type="radio" name="sport" ng-model="bookingData.sport" ng-value="sport.value" required />
+                      <label>
+                        <span>{{ sport.label }}</span>
+                        <small class="text-muted d-block" style="font-weight: 400; font-size: 13px; margin-top: 4px">{{
+                          sport.desc }}</small>
+                      </label>
+                    </div>
+
+                    <!-- Rowing levels (shown only when rowing is selected) -->
+                    <div class="level-options show" ng-if="sport.value === 'rowing' && bookingData.sport === 'rowing'">
+                      <div class="level-option" ng-repeat="lvl in levels">
+                        <input type="radio" name="rowing-level" ng-model="bookingData.level" ng-value="lvl"
+                          id="level-{{ lvl }}" />
+                        <label for="level-{{ lvl }}">{{ lvl | capitalize }}</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Quantity -->
+                  <div class="mb-4 mt-5">
+                    <label class="form-label fw-semibold mb-3">Number of Bookings</label>
+                    <div class="d-flex align-items-center gap-3">
+                      <button type="button" class="btn btn-outline-secondary quantity-btn"
+                        ng-click="bookingData.quantity = bookingData.quantity > 1 ? bookingData.quantity - 1 : 1"
+                        style="width:45px;height:45px;border-radius:10px;font-size:20px;padding:0;">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <input type="number" ng-model="bookingData.quantity"
+                        class="form-control quantity-input text-center" min="1" required
+                        style="max-width:100px;font-size:18px;font-weight:600;" />
+                      <button type="button" class="btn btn-outline-secondary quantity-btn"
+                        ng-click="bookingData.quantity = bookingData.quantity + 1"
+                        style="width:45px;height:45px;border-radius:10px;font-size:20px;padding:0;">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="btn-group-nav">
+                    <div></div>
+                    <button type="button" class="btn btn-next" ng-click="goToStage(2)" ng-disabled="!stage1Valid()">
+                      Next →
+                    </button>
+                  </div>
+                </div>
+
+                <!-- ===== STAGE 2: Date & Time ===== -->
+                <div class="booking-stage" ng-class="{'active': currentStage === 2}">
+                  <h4 class="mb-4">Step 2: Choose Date &amp; Time</h4>
+
+                  <div class="mb-4">
+                    <label class="form-label">Select Date</label>
+                    <input type="text" id="booking-date" class="form-control" ng-model="bookingData.date" required />
+                  </div>
+
+                  <div class="mb-4">
+                    <label class="form-label">Available Session Times</label>
+                    <div class="time-slots" id="time-slots">
+                      <div class="time-slot" ng-repeat="t in timeSlots" ng-class="{'selected': bookingData.time === t}"
+                        ng-click="selectTime(t)">{{ t }}</div>
+                    </div>
+                  </div>
+
+                  <div class="btn-group-nav">
+                    <button type="button" class="btn btn-back" ng-click="goToStage(1)">← Back</button>
+                    <button type="button" class="btn btn-next" ng-click="goToStage(3)" ng-disabled="!stage2Valid()">
+                      Next →
+                    </button>
+                  </div>
+                </div>
+
+                <!-- ===== STAGE 3: Payment & Confirmation ===== -->
+                <div class="booking-stage" ng-class="{'active': currentStage === 3}">
+                  <h4 class="mb-4">Step 3: Payment &amp; Confirmation</h4>
+
+                  <!-- Booking summary -->
+                  <div class="booking-summary">
+                    <h5 class="mb-3">Booking Summary</h5>
+                    <div class="summary-item">
+                      <span>Sport:</span><span>{{ bookingData.sport | capitalize }}</span>
+                    </div>
+                    <div class="summary-item" ng-show="bookingData.sport === 'rowing' && bookingData.level">
+                      <span>Level:</span><span>{{ bookingData.level | capitalize }}</span>
+                    </div>
+                    <div class="summary-item">
+                      <span>Quantity:</span><span>{{ bookingData.quantity }}</span>
+                    </div>
+                    <div class="summary-item">
+                      <span>Date:</span><span>{{ displayDate() }}</span>
+                    </div>
+                    <div class="summary-item">
+                      <span>Time:</span><span>{{ bookingData.time }}</span>
+                    </div>
+                  </div>
+
+                  <!-- Payment methods (ng-repeat) -->
+                  <div class="mb-4 mt-4">
+                    <label class="form-label mb-3">Payment Method</label>
+                    <div class="payment-method" ng-repeat="m in paymentMethods"
+                      ng-class="{'selected': bookingData.paymentMethod === m.value}" ng-click="selectPayment(m.value)">
+                      <input type="radio" name="payment-method" ng-model="bookingData.paymentMethod" ng-value="m.value"
+                        required />
+                      <label style="cursor: pointer">
+                        <strong>{{ m.label }}</strong>
+                        <small class="d-block text-muted">{{ m.desc }}</small>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Screenshot upload (Instapay only) -->
+                  <div ng-show="bookingData.paymentMethod === 'instapay'">
+                    <label class="form-label">Upload Payment Screenshot</label>
+                    <div class="file-upload-area" id="file-upload-area">
+                      <i class="fas fa-cloud-upload-alt fa-2x mb-2" style="color: #9ca3af"></i>
+                      <p>Click to upload or drag and drop</p>
+                      <p class="text-muted small">PNG, JPG, PDF up to 5MB</p>
+                      <input type="file" id="payment-screenshot" accept="image/*,.pdf"
+                        onchange="angular.element(this).scope().setFile(this.files)" />
+                      <div class="file-name" id="file-name" style="display: none"></div>
+                    </div>
+                  </div>
+
+                  <div class="btn-group-nav mt-4">
+                    <button type="button" class="btn btn-back" ng-click="goToStage(2)">← Back</button>
+                    <button type="submit" class="btn btn-book" id="confirmBooking"
+                      ng-disabled="loading || !stage3Valid()">
+                      <span ng-show="!loading">Confirm Booking</span>
+                      <span ng-show="loading"><i class="fas fa-spinner fa-spin"></i> Processing...</span>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+
+  <!-- Scripts -->

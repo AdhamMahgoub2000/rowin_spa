@@ -1,0 +1,355 @@
+<div class="dashboard-layout d-flex">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content with-sidebar flex-grow-1">
+
+    <!-- Hero Banner -->
+    <section class="customers-hero">
+      <button class="hamburger-btn" ng-click="$emit('toggleSidebar')">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <div class="customers-hero-content">
+        <div class="customers-hero-icon">
+          <span class="material-symbols-outlined">rowing</span>
+        </div>
+        <div>
+          <h1 class="customers-hero-title">Members</h1>
+          <p class="customers-hero-sub">
+            Manage all registered rowers — view profiles, update details, and
+            keep your crew in shape.
+          </p>
+        </div>
+        <div class="customers-hero-stats ms-auto d-none d-md-flex gap-4">
+          <div class="hero-stat">
+            <span class="hero-stat-num">{{ customers.length }}</span>
+            <span class="hero-stat-label">Total Members</span>
+          </div>
+
+          <div class="hero-stat">
+            <span class="hero-stat-num">{{ inductionCount }}</span>
+            <span class="hero-stat-label">Induction</span>
+          </div>
+
+          <div class="hero-stat">
+            <span class="hero-stat-num">{{ beginnerCount }}</span>
+            <span class="hero-stat-label">Beginner</span>
+          </div>
+
+          <div class="hero-stat">
+            <span class="hero-stat-num">{{ intermediateCount }}</span>
+            <span class="hero-stat-label">Intermediate</span>
+          </div>
+
+          <div class="hero-stat">
+            <span class="hero-stat-num">{{ advancedCount }}</span>
+            <span class="hero-stat-label">Advanced</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Toolbar -->
+    <section class="customers-toolbar">
+      <div class="customers-search-wrap">
+        <span class="material-symbols-outlined csearch-icon">search</span>
+        <input
+          class="customers-search"
+          type="text"
+          ng-model="searchText"
+          placeholder="Search by name, email or role…"
+        />
+      </div>
+      <div class="customers-filters d-flex gap-2 flex-wrap">
+        <button
+          class="cfilter-btn"
+          ng-class="{ active: levelFilter === '' }"
+          ng-click="setLevelFilter('')"
+        >
+          All
+        </button>
+
+        <button
+          class="cfilter-btn"
+          ng-class="{ active: levelFilter === 'induction' }"
+          ng-click="setLevelFilter('induction')"
+        >
+          Induction
+        </button>
+
+        <button
+          class="cfilter-btn"
+          ng-class="{ active: levelFilter === 'beginner' }"
+          ng-click="setLevelFilter('beginner')"
+        >
+          Beginner
+        </button>
+
+        <button
+          class="cfilter-btn"
+          ng-class="{ active: levelFilter === 'intermediate' }"
+          ng-click="setLevelFilter('intermediate')"
+        >
+          Intermediate
+        </button>
+
+        <button
+          class="cfilter-btn"
+          ng-class="{ active: levelFilter === 'advanced' }"
+          ng-click="setLevelFilter('advanced')"
+        >
+          Advanced
+        </button>
+      </div>
+    </section>
+
+    <!-- Loading -->
+    <div ng-if="loading" class="customers-loading">
+      <div class="cspinner"></div>
+      <p>Loading members…</p>
+    </div>
+
+    <!-- Error -->
+    <div ng-if="error" class="customers-error">
+      <span class="material-symbols-outlined">error</span>
+      {{ error }}
+    </div>
+
+    <!-- Customer List -->
+    <section
+      class="customers-list"
+      ng-if="!loading && filteredCustomers().length"
+    >
+      <div
+        class="ccard"
+        ng-repeat="c in filteredCustomers() track by c.id"
+        ng-style="{'animation-delay': ($index * 60) + 'ms'}"
+        
+      >
+        <!-- Avatar -->
+        <div class="ccard-avatar" ng-class="'avatar-color-' + ($index % 6)">
+          {{ (c.full_name || c.email || 'R').charAt(0).toUpperCase() }}
+        </div>
+
+        <!-- Info -->
+        <div class="ccard-info">
+          <a href="javascript:void(0)"  ng-click="goProfile(c.id)" style="text-decoration: none;" class="ccard-name ">{{ c.fname || '—' }} {{c.lname || '—'}}</a>
+          <div class="ccard-email">{{ c.email }}</div>
+          <div class="ccard-meta d-flex gap-3 flex-wrap">
+            <span
+              class="ccard-badge"
+              ng-class="{
+    'badge-induction': c.level === 'induction',
+    'badge-beginner': c.level === 'beginner',
+    'badge-intermediate': c.level === 'intermediate',
+    'badge-advanced': c.level === 'advanced'
+  }"
+            >
+              {{ c.level }}
+            </span>
+            <span
+              class="ccard-badge"
+              ng-class="c.role === 'admin' ? 'badge-admin' : 'badge-member'"
+            >
+              {{ c.role }}
+            </span>
+            <span class="ccard-date">
+              <span
+                class="material-symbols-outlined"
+                style="font-size: 13px; vertical-align: -2px"
+                >calendar_today</span
+              >
+              Joined {{ c.created_at | date:'MMM d, yyyy' }}
+            </span>
+            <span class="ccard-phone" ng-if="c.mobile_number">
+              <span
+                class="material-symbols-outlined"
+                style="font-size: 13px; vertical-align: -2px"
+                >call</span
+              >
+              {{ c.mobile_number }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="ccard-actions">
+          <button
+            class="caction-btn caction-edit"
+            ng-click="openWhatsapp(c.mobile_number)"
+            title="Edit"
+          >
+            <span class="material-symbols-outlined">phone</span>
+          </button>
+        </div>
+        <div class="ccard-actions">
+          <button
+            class="caction-btn caction-edit"
+            ng-click="editCustomer(c)"
+            title="Edit"
+          >
+            <span class="material-symbols-outlined">edit</span>
+          </button>
+          <button
+            class="caction-btn caction-delete"
+            ng-click="confirmDelete(c)"
+            title="Delete"
+          >
+            <span class="material-symbols-outlined">delete</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Empty state -->
+    <div
+      ng-if="!loading && !filteredCustomers().length && !error"
+      class="customers-empty"
+    >
+      <span class="material-symbols-outlined customers-empty-icon"
+        >group_off</span
+      >
+      <p>No members match your search.</p>
+      <button
+        class="cfilter-btn active"
+        ng-click="searchText=''; roleFilter=''"
+      >
+        Clear filters
+      </button>
+    </div>
+  </main>
+</div>
+
+<!-- ── Edit Modal ─────────────────────────────────────────── -->
+<div class="cmodal-overlay" ng-show="showEditModal" ng-click="closeEditModal()">
+  <div class="cmodal" ng-click="$event.stopPropagation()">
+    <div class="cmodal-header">
+      <h5 class="cmodal-title">
+        <span class="material-symbols-outlined">edit</span>
+        Edit Member
+      </h5>
+      <button class="cmodal-close" ng-click="closeEditModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="cmodal-body">
+      <div class="cmodal-field">
+        <label>First Name</label>
+        <input
+          type="text"
+          ng-model="selectedCustomer.fname"
+          placeholder="First name"
+        />
+      </div>
+      <div class="cmodal-field">
+        <label>Last Name</label>
+        <input
+          type="text"
+          ng-model="selectedCustomer.lname"
+          placeholder="Last name"
+        />
+      </div>
+      <div class="cmodal-field">
+        <label>Email</label>
+        <input
+          type="email"
+          ng-model="selectedCustomer.email"
+          placeholder="Email address"
+        />
+      </div>
+      <div class="cmodal-field">
+        <label>Phone</label>
+        <input
+          type="text"
+          ng-model="selectedCustomer.mobile_number"
+          placeholder="Phone number"
+        />
+      </div>
+
+      <div class="cmodal-field">
+        <label>Level</label>
+        <select ng-model="selectedCustomer.level">
+          <option value="">Select level</option>
+          <option value="induction">Induction</option>
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </div>
+      <div class="cmodal-field">
+        <label>Role</label>
+        <select ng-model="selectedCustomer.role">
+          <option value="user">Member / Rower</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+    </div>
+    <div class="cmodal-footer">
+      <button class="cmodal-btn-cancel" ng-click="closeEditModal()">
+        Cancel
+      </button>
+      <button
+        class="cmodal-btn-save"
+        ng-click="saveCustomer()"
+        ng-disabled="saving"
+      >
+        <span ng-if="saving" class="cspinner-sm"></span>
+        {{ saving ? 'Saving…' : 'Save Changes' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Delete Confirm Modal ───────────────────────────────── -->
+<div
+  class="cmodal-overlay"
+  ng-show="showDeleteModal"
+  ng-click="closeDeleteModal()"
+>
+  <div class="cmodal cmodal-sm" ng-click="$event.stopPropagation()">
+    <div class="cmodal-header cmodal-header-danger">
+      <h5 class="cmodal-title">
+        <span class="material-symbols-outlined">warning</span>
+        Remove Member
+      </h5>
+      <button class="cmodal-close" ng-click="closeDeleteModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="cmodal-body">
+      <p style="margin: 0; color: #334155">
+        Are you sure you want to remove
+        <strong
+          >{{ customerToDelete.full_name || customerToDelete.email }}</strong
+        >? This action cannot be undone.
+      </p>
+    </div>
+    <div class="cmodal-footer">
+      <button class="cmodal-btn-cancel" ng-click="closeDeleteModal()">
+        Cancel
+      </button>
+      <button
+        class="cmodal-btn-delete"
+        ng-click="deleteCustomer()"
+        ng-disabled="deleting"
+      >
+        <span ng-if="deleting" class="cspinner-sm"></span>
+        {{ deleting ? 'Removing…' : 'Remove Member' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Toast Notifications ────────────────────────────────── -->
+<div class="ctoast-stack">
+  <div
+    ng-repeat="toast in toasts track by $index"
+    class="ctoast"
+    ng-class="'ctoast-' + toast.type"
+  >
+    <span class="material-symbols-outlined ctoast-icon">
+      {{ toast.type === 'success' ? 'check_circle' : (toast.type === 'warning' ?
+      'warning' : 'error') }}
+    </span>
+    {{ toast.message }}
+  </div>
+</div>

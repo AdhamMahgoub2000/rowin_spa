@@ -1,0 +1,557 @@
+<div class="dashboard-layout d-flex">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content with-sidebar flex-grow-1">
+    <!-- ══════════════════════════════════════
+         HERO BANNER
+    ══════════════════════════════════════ -->
+    <section class="db-hero">
+      <button
+        class="sidebar-hamburger d-lg-none"
+        ng-click="$emit('toggleSidebar')"
+        aria-label="Toggle menu"
+      >
+        <span class="sidebar-ham-line"></span>
+        <span class="sidebar-ham-line"></span>
+        <span class="sidebar-ham-line"></span>
+      </button>
+
+      <div class="db-hero-content">
+        <div class="db-hero-left">
+          <div class="db-hero-icon">
+            <span class="material-symbols-outlined">rowing</span>
+          </div>
+          <div>
+            <p class="db-hero-greeting">Welcome back,</p>
+            <h1 class="db-hero-title">
+              {{ adminName }}
+            </h1>
+            <p class="db-hero-sub">
+              Here's what's happening at Rowin Academy today.
+            </p>
+          </div>
+        </div>
+
+        <div class="db-hero-stats d-none d-xl-flex gap-3">
+          <div class="db-hero-stat">
+            <span class="db-hero-stat-num">{{ totalBookings }}</span>
+            <span class="db-hero-stat-label">Total Bookings</span>
+          </div>
+          <div class="db-hero-stat">
+            <span class="db-hero-stat-num">{{ totalMembers }}</span>
+            <span class="db-hero-stat-label">Members</span>
+          </div>
+          <div class="db-hero-stat db-hero-stat--accent">
+            <span class="db-hero-stat-num">{{ todayCount }}</span>
+            <span class="db-hero-stat-label">Today</span>
+          </div>
+          <div class="db-hero-stat db-hero-stat--gold">
+            <span class="db-hero-stat-num">{{ tomorrowCount }}</span>
+            <span class="db-hero-stat-label">Tomorrow</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Loading -->
+    <div ng-if="loading" class="db-loading">
+      <div class="db-spinner"></div>
+      <p>Loading dashboard…</p>
+    </div>
+
+    <div ng-if="!loading">
+      <!-- ══════════════════════════════════════
+           ROW 1 — KPI CARDS
+      ══════════════════════════════════════ -->
+      <section class="db-section">
+        <div class="db-kpi-grid">
+          <div class="db-kpi-card db-kpi--blue">
+            <div class="db-kpi-icon-wrap">
+              <span class="material-symbols-outlined">event_note</span>
+            </div>
+            <div class="db-kpi-body">
+              <span class="db-kpi-label">Total Bookings</span>
+              <span class="db-kpi-num">{{ totalBookings }}</span>
+              <span class="db-kpi-sub">All time</span>
+            </div>
+            <div class="db-kpi-bg-icon">
+              <span class="material-symbols-outlined">event_note</span>
+            </div>
+          </div>
+
+          <div class="db-kpi-card db-kpi--green">
+            <div class="db-kpi-icon-wrap">
+              <span class="material-symbols-outlined">group</span>
+            </div>
+            <div class="db-kpi-body">
+              <span class="db-kpi-label">Active Members</span>
+              <span class="db-kpi-num">{{ activeMembers }}</span>
+              <span class="db-kpi-sub">Unique bookers</span>
+            </div>
+            <div class="db-kpi-bg-icon">
+              <span class="material-symbols-outlined">group</span>
+            </div>
+          </div>
+
+          <div class="db-kpi-card db-kpi--amber">
+            <div class="db-kpi-icon-wrap">
+              <span class="material-symbols-outlined">schedule</span>
+            </div>
+            <div class="db-kpi-body">
+              <span class="db-kpi-label">Upcoming Sessions</span>
+              <span class="db-kpi-num">{{ upcomingSessions }}</span>
+              <span class="db-kpi-sub">From today onwards</span>
+            </div>
+            <div class="db-kpi-bg-icon">
+              <span class="material-symbols-outlined">schedule</span>
+            </div>
+          </div>
+
+          <div class="db-kpi-card db-kpi--teal">
+            <div class="db-kpi-icon-wrap">
+              <span class="material-symbols-outlined">calendar_month</span>
+            </div>
+            <div class="db-kpi-body">
+              <span class="db-kpi-label">This Month</span>
+              <span class="db-kpi-num">{{ thisMonthCount }}</span>
+              <div
+                class="db-kpi-delta"
+                ng-class="monthlyDeltaUp ? 'db-delta-up' : 'db-delta-down'"
+              >
+                <span class="material-symbols-outlined db-delta-icon"
+                  >{{ monthlyDeltaUp ? 'trending_up' : 'trending_down' }}</span
+                >
+                {{ monthlyDelta }}% vs last month
+              </div>
+            </div>
+            <div class="db-kpi-bg-icon">
+              <span class="material-symbols-outlined">calendar_month</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+           ROW 2 — DAILY CHART + MONTHLY SNAPSHOT
+      ══════════════════════════════════════ -->
+      <section class="db-section">
+        <div class="db-row-2">
+          <!-- Last 7 days bar chart -->
+          <div class="db-card db-card--chart">
+            <div class="db-card-header">
+              <div class="db-card-header-left">
+                <span class="material-symbols-outlined db-card-icon"
+                  >bar_chart</span
+                >
+                <div>
+                  <h3 class="db-card-title">Daily Bookings</h3>
+                  <p class="db-card-sub">Last 7 days activity</p>
+                </div>
+              </div>
+              <div class="db-today-pill">
+                <span class="db-today-dot"></span>
+                Today: {{ todayCount }} session{{ todayCount !== 1 ? 's' : '' }}
+              </div>
+            </div>
+            <div class="db-bar-chart">
+              <div
+                class="db-bar-col"
+                ng-repeat="day in last7Days"
+                ng-class="{ 'db-bar-col--today': day.isToday }"
+              >
+                <div class="db-bar-count">{{ day.count }}</div>
+                <div class="db-bar-track">
+                  <div
+                    class="db-bar-fill"
+                    ng-style="{ height: (day.pct || 2) + '%' }"
+                  ></div>
+                </div>
+                <div class="db-bar-label">{{ day.label }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Monthly comparison -->
+          <div class="db-card db-card--month">
+            <div class="db-card-header">
+              <div class="db-card-header-left">
+                <span class="material-symbols-outlined db-card-icon"
+                  >compare_arrows</span
+                >
+                <div>
+                  <h3 class="db-card-title">Monthly Snapshot</h3>
+                  <p class="db-card-sub">This month vs last month</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="db-month-compare">
+              <div class="db-month-block db-month-block--this">
+                <span class="db-month-num">{{ thisMonthCount }}</span>
+                <span class="db-month-label">This Month</span>
+                <div class="db-month-bar-track">
+                  <div
+                    class="db-month-bar db-month-bar--this"
+                    ng-style="{ width: (thisMonthCount / ((thisMonthCount + lastMonthCount) || 1) * 100) + '%' }"
+                  ></div>
+                </div>
+              </div>
+              <div class="db-month-vs">VS</div>
+              <div class="db-month-block db-month-block--last">
+                <span class="db-month-num">{{ lastMonthCount }}</span>
+                <span class="db-month-label">Last Month</span>
+                <div class="db-month-bar-track">
+                  <div
+                    class="db-month-bar db-month-bar--last"
+                    ng-style="{ width: (lastMonthCount / ((thisMonthCount + lastMonthCount) || 1) * 100) + '%' }"
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="db-month-delta-banner"
+              ng-class="monthlyDeltaUp ? 'db-banner-up' : 'db-banner-down'"
+            >
+              <span class="material-symbols-outlined"
+                >{{ monthlyDeltaUp ? 'arrow_upward' : 'arrow_downward' }}</span
+              >
+              <span
+                ><strong>{{ monthlyDelta }}%</strong> {{ monthlyDeltaUp ?
+                'increase' : 'decrease' }} vs last month</span
+              >
+            </div>
+
+            <div class="db-info-pills">
+              <div class="db-info-pill">
+                <span class="material-symbols-outlined">wb_sunny</span>
+                <span>Tomorrow: <strong>{{ tomorrowCount }}</strong></span>
+              </div>
+              <div class="db-info-pill">
+                <span class="material-symbols-outlined">today</span>
+                <span>Today: <strong>{{ todayCount }}</strong></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+           ROW 3 — LEVEL + SLOTS + TYPES
+      ══════════════════════════════════════ -->
+      <section class="db-section">
+        <div class="db-row-3">
+          <!-- Bookings by level -->
+          <div class="db-card">
+            <div class="db-card-header">
+              <div class="db-card-header-left">
+                <span class="material-symbols-outlined db-card-icon"
+                  >military_tech</span
+                >
+                <div>
+                  <h3 class="db-card-title">Bookings by Level</h3>
+                  <p class="db-card-sub">Session level distribution</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="db-level-list">
+              <div class="db-level-row">
+                <div class="db-level-info">
+                  <span class="db-level-dot db-level-dot--induction"></span>
+                  <span class="db-level-name">Induction</span>
+                </div>
+                <div class="db-level-bar-wrap">
+                  <div class="db-level-bar-track">
+                    <div
+                      class="db-level-bar db-level-bar--induction"
+                      ng-style="{ width: (inductionCount / (totalBookings || 1) * 100) + '%' }"
+                    ></div>
+                  </div>
+                  <span class="db-level-count">{{ inductionCount }}</span>
+                </div>
+                <span class="db-level-pct"
+                  >{{ (inductionCount / (totalBookings || 1) * 100) | number:0
+                  }}%</span
+                >
+              </div>
+
+              <div class="db-level-row">
+                <div class="db-level-info">
+                  <span class="db-level-dot db-level-dot--beginner"></span>
+                  <span class="db-level-name">Beginner</span>
+                </div>
+                <div class="db-level-bar-wrap">
+                  <div class="db-level-bar-track">
+                    <div
+                      class="db-level-bar db-level-bar--beginner"
+                      ng-style="{ width: (beginnerCount / (totalBookings || 1) * 100) + '%' }"
+                    ></div>
+                  </div>
+                  <span class="db-level-count">{{ beginnerCount }}</span>
+                </div>
+                <span class="db-level-pct"
+                  >{{ (beginnerCount / (totalBookings || 1) * 100) | number:0
+                  }}%</span
+                >
+              </div>
+
+              <div class="db-level-row">
+                <div class="db-level-info">
+                  <span class="db-level-dot db-level-dot--intermediate"></span>
+                  <span class="db-level-name">Intermediate</span>
+                </div>
+                <div class="db-level-bar-wrap">
+                  <div class="db-level-bar-track">
+                    <div
+                      class="db-level-bar db-level-bar--intermediate"
+                      ng-style="{ width: (intermediateCount / (totalBookings || 1) * 100) + '%' }"
+                    ></div>
+                  </div>
+                  <span class="db-level-count">{{ intermediateCount }}</span>
+                </div>
+                <span class="db-level-pct"
+                  >{{ (intermediateCount / (totalBookings || 1) * 100) |
+                  number:0 }}%</span
+                >
+              </div>
+
+              <div class="db-level-row">
+                <div class="db-level-info">
+                  <span class="db-level-dot db-level-dot--advanced"></span>
+                  <span class="db-level-name">Advanced</span>
+                </div>
+                <div class="db-level-bar-wrap">
+                  <div class="db-level-bar-track">
+                    <div
+                      class="db-level-bar db-level-bar--advanced"
+                      ng-style="{ width: (advancedCount / (totalBookings || 1) * 100) + '%' }"
+                    ></div>
+                  </div>
+                  <span class="db-level-count">{{ advancedCount }}</span>
+                </div>
+                <span class="db-level-pct"
+                  >{{ (advancedCount / (totalBookings || 1) * 100) | number:0
+                  }}%</span
+                >
+              </div>
+            </div>
+
+            <div class="db-member-levels">
+              <div class="db-ml-title">
+                <span
+                  class="material-symbols-outlined"
+                  style="font-size: 15px; vertical-align: -2px"
+                  >person</span
+                >
+                Members by level
+              </div>
+              <div class="db-ml-pills">
+                <span class="db-ml-pill db-ml-pill--induction"
+                  >Induction {{ memberInduction }}</span
+                >
+                <span class="db-ml-pill db-ml-pill--beginner"
+                  >Beginner {{ memberBeginner }}</span
+                >
+                <span class="db-ml-pill db-ml-pill--intermediate"
+                  >Intermediate {{ memberIntermediate }}</span
+                >
+                <span class="db-ml-pill db-ml-pill--advanced"
+                  >Advanced {{ memberAdvanced }}</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Time-slot popularity -->
+          <div class="db-card">
+            <div class="db-card-header">
+              <div class="db-card-header-left">
+                <span class="material-symbols-outlined db-card-icon"
+                  >alarm</span
+                >
+                <div>
+                  <h3 class="db-card-title">Slot Popularity</h3>
+                  <p class="db-card-sub">All-time session distribution</p>
+                </div>
+              </div>
+              <div class="db-busiest-pill">
+                <span class="material-symbols-outlined" style="font-size: 14px"
+                  >bolt</span
+                >
+                {{ busiestSlot }}
+              </div>
+            </div>
+
+            <div class="db-slot-list">
+              <div class="db-slot-row" ng-repeat="slot in slotStats">
+                <div class="db-slot-header-row">
+                  <div
+                    class="db-slot-dot"
+                    ng-class="'db-slot-dot--' + slot.color"
+                  ></div>
+                  <span class="db-slot-time">{{ slot.time }}</span>
+                  <span
+                    class="db-slot-count-badge"
+                    ng-class="'db-slot-badge--' + slot.color"
+                    >{{ slot.count }}</span
+                  >
+                </div>
+                <div class="db-slot-bar-track">
+                  <div
+                    class="db-slot-bar"
+                    ng-class="'db-slot-bar--' + slot.color"
+                    ng-style="{ width: (slot.pct || 2) + '%' }"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Session types + quick nav -->
+          <div class="db-card">
+            <div class="db-card-header">
+              <div class="db-card-header-left">
+                <span class="material-symbols-outlined db-card-icon"
+                  >category</span
+                >
+                <div>
+                  <h3 class="db-card-title">Session Types</h3>
+                  <p class="db-card-sub">Booking breakdown by type</p>
+                </div>
+              </div>
+            </div>
+
+            <div ng-if="sessionTypes.length" class="db-type-list">
+              <div class="db-type-row" ng-repeat="t in sessionTypes">
+                <div class="db-type-label">
+                  <span class="db-type-index">{{ $index + 1 }}</span>
+                  <span class="db-type-name">{{ t.type }}</span>
+                </div>
+                <div class="db-type-bar-wrap">
+                  <div class="db-type-bar-track">
+                    <div
+                      class="db-type-bar"
+                      ng-style="{ width: t.pct + '%' }"
+                    ></div>
+                  </div>
+                  <span class="db-type-count">{{ t.count }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div ng-if="!sessionTypes.length" class="db-type-empty">
+              <span class="material-symbols-outlined">info</span>
+              No session type data yet.
+            </div>
+
+            <div class="db-quick-nav">
+              <button class="db-nav-btn" ng-click="goTo('/bookings')">
+                <span class="material-symbols-outlined">event_note</span>
+                Manage Bookings
+              </button>
+              <button class="db-nav-btn" ng-click="goTo('/customers')">
+                <span class="material-symbols-outlined">group</span>
+                View Members
+              </button>
+              <button class="db-nav-btn" ng-click="goTo('/contact-requests')">
+                <span class="material-symbols-outlined">contact_support</span>
+                Requests
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══════════════════════════════════════
+           ROW 4 — RECENT BOOKINGS TABLE
+      ══════════════════════════════════════ -->
+      <section class="db-section">
+        <div class="db-card db-card--full">
+          <div class="db-card-header">
+            <div class="db-card-header-left">
+              <span class="material-symbols-outlined db-card-icon"
+                >history</span
+              >
+              <div>
+                <h3 class="db-card-title">Recent Bookings</h3>
+                <p class="db-card-sub">Latest 6 bookings across all sessions</p>
+              </div>
+            </div>
+            <button class="db-see-all-btn" ng-click="goTo('/bookings')">
+              See all
+              <span
+                class="material-symbols-outlined"
+                style="font-size: 16px; vertical-align: -3px"
+                >arrow_forward</span
+              >
+            </button>
+          </div>
+
+          <div class="db-recent-table-wrap" ng-if="recentBookings.length">
+            <table class="db-recent-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Member</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Level</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="db-recent-tr"
+                  ng-repeat="b in recentBookings track by $index"
+                >
+                  <td class="db-recent-num">{{ $index + 1 }}</td>
+                  <td>
+                    <div class="db-recent-member">
+                      <div
+                        class="db-recent-avatar"
+                        ng-class="'avatar-color-' + ($index % 6)"
+                      >
+                        {{ (b.name || b.email_address ||
+                        'R').charAt(0).toUpperCase() }}
+                      </div>
+                      <div>
+                        <div class="db-recent-name">{{ b.name || '—' }}</div>
+                        <div class="db-recent-email">{{ b.email_address }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="db-recent-date">
+                    {{ b.session_date | date:'EEE, MMM d y' }}
+                  </td>
+                  <td class="db-recent-time">{{ b.session_time || '—' }}</td>
+                  <td>
+                    <span
+                      class="db-recent-badge"
+                      ng-class="{
+                            'db-badge-induction':    b.level === 'induction',
+                            'db-badge-beginner':     b.level === 'beginner',
+                            'db-badge-intermediate': b.level === 'intermediate',
+                            'db-badge-advanced':     b.level === 'advanced'
+                          }"
+                      >{{ b.level || '—' }}</span
+                    >
+                  </td>
+                  <td>
+                    <span class="db-type-tag">{{ b.session_type || '—' }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div ng-if="!recentBookings.length" class="db-empty-state">
+            <span class="material-symbols-outlined">event_busy</span>
+            <p>No bookings found yet.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+    <!-- /ng-if !loading -->
+  </main>
+</div>

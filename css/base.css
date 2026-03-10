@@ -1,0 +1,98 @@
+/* ================================================================
+   BASE — Reset · Variables · Typography · Body
+   ================================================================ */
+
+/* Angular FOUC prevention */
+[ng-cloak] { display: none !important; }
+
+/* ── CSS Variables ───────────────────────────────────────────── */
+:root {
+  /* Brand colors */
+  --brand-blue:        rgb(34, 56, 145);
+  --brand-blue-light:  rgb(19, 59, 222);
+  --brand-blue-dark:   rgb(20, 38, 110);
+  --brand-orange:      rgb(248, 158, 69);
+
+  /* Legacy aliases */
+  --blue-color:   var(--brand-blue);
+  --light-color:  var(--brand-blue-light);
+  --orange-color: var(--brand-orange);
+
+  /* Palette */
+  --white:      #ffffff;
+  --off-white:  #f8f7f4;
+  --text-dark:  #0f172a;
+  --text-mid:   #475569;
+
+  /* Radii */
+  --radius-lg: 20px;
+  --radius-xl: 32px;
+
+  /* Shadows */
+  --shadow-card:  0 8px 32px rgba(0, 0, 0, 0.10);
+  --shadow-hover: 0 20px 60px rgba(34, 56, 145, 0.18);
+
+  /* Motion */
+  --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Reset ───────────────────────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+img { max-width: 100%; }
+
+html, body { overflow-x: hidden; }
+
+/* ── Global typography & body ────────────────────────────────── */
+body,
+h1, h2, h3, h4, h5, h6,
+p, a, li, span, button, input, textarea, select {
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f8f9fa;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Scroll-reveal ───────────────────────────────────────────── */
+[data-rw-reveal] {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.75s ease, transform 0.75s ease;
+}
+[data-rw-reveal="fade"] { transform: none; }
+[data-rw-reveal].rw-revealed { opacity: 1; transform: none; }
+
+/* ── Utility ─────────────────────────────────────────────────── */
+.rw-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Replaces hardcoded inline "width: 70%" on landing sub-headings */
+.landing-sub {
+  font-size: 1rem;
+  max-width: 70%;
+  opacity: 0.92;
+}
+@media (max-width: 768px) {
+  .landing-sub { max-width: 100%; }
+}
+
+/* Prevent wide inline styles breaking layout on mobile */
+@media (max-width: 768px) {
+  [style*="width: 70%"]    { width: 100% !important; }
+  [style*="width: 80%"]    { width: 100% !important; }
+  [style*="width: 18rem"]  { width: 100% !important; }
+  [style*="margin: 150px"] { margin: 0 !important; }
+  [style*="margin: 100px"] { margin: 0 !important; }
+}

@@ -1,0 +1,293 @@
+/* ================================================================
+   PAGES — About · Services · Events · Contact · Footer
+   ================================================================ */
+
+/* ── Shared landing hero banners ─────────────────────────────── */
+.landing {
+  color: white;
+  min-height: 320px;
+  height: auto !important;
+  padding: 80px 24px !important;
+  background: linear-gradient(rgba(20, 38, 110, 0.82), rgba(34, 56, 145, 0.82)),
+              url('../images/cover3.jpeg') center/cover no-repeat;
+}
+.landing.about-us {
+  background: linear-gradient(rgba(20, 38, 110, 0.82), rgba(34, 56, 145, 0.82)),
+              url('../images/team.JPG') center/cover no-repeat;
+}
+.landing.events {
+  background: linear-gradient(rgba(20, 38, 110, 0.82), rgba(34, 56, 145, 0.82)),
+              url('../images/olympix2.JPG') center/cover no-repeat;
+}
+
+/* Old hero (services / contact pages) */
+.hero {
+  height: 50vh;
+  background: linear-gradient(rgba(37, 99, 235, 0.7), rgba(15, 23, 42, 0.7)),
+              url('../images/cover3.jpeg') center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  padding: 0 20px;
+}
+.hero-content h1 { font-size: 3.5rem; font-weight: 700; margin-bottom: 12px; }
+.hero-content p  { font-size: 1.1rem; font-weight: 300; }
+
+/* ── Shared section classes ──────────────────────────────────── */
+.icon {
+  color: var(--orange-color);
+  font-size: 2rem;
+  margin: 20px;
+}
+.card { border: 0; border-radius: 20px; }
+.image { border-radius: 20px; width: 90%; }
+.event-card { transition: transform 0.3s ease-in-out; }
+.event-card:hover { transform: translateY(-12px); }
+
+/* ── About — shared layout helpers ──────────────────────────── */
+.story p  { color: rgba(0, 0, 0, 0.68); }
+.values   { background-color: rgba(245, 244, 244, 0.72); }
+.values p { color: rgba(0, 0, 0, 0.66); }
+.coaches  { background-color: rgba(245, 244, 244, 0.72); }
+
+.coach-img {
+  width: 25rem;
+  height: 25rem;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.achi { background-color: var(--blue-color); color: white; gap: 5rem; }
+.achi h1 { display: flex; justify-content: center; }
+.achi p  { color: rgba(241, 244, 255, 0.88); font-size: 0.9rem; text-align: center; }
+
+/* ── Services — image shapes ─────────────────────────────────── */
+.service-img-right {
+  border-radius: 0 20px 20px 0;
+  min-height: 100%;
+  object-fit: cover;
+  height: 300px;
+}
+.service-img-left {
+  border-radius: 20px 0 0 20px;
+  min-height: 100%;
+  object-fit: cover;
+  height: 300px;
+}
+
+/* ================================================================
+   CONTACT — modern redesign (cm- prefix)
+   ================================================================ */
+.contact-modern { background: #f7f9fc; }
+
+/* Hero */
+.cm-hero {
+  padding: 120px 0 90px;
+  background: linear-gradient(135deg, var( --brand-blue-dark), var(--orange-color) 200%);
+  color: white;
+  text-align: center;
+}
+.cm-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+.cm-title { font-size: clamp(2rem, 6vw, 52px); font-weight: 700; margin-bottom: 10px; }
+.cm-subtitle { max-width: 600px; margin: 0 auto; opacity: 0.85; line-height: 1.7; }
+
+/* Info cards (overlap hero bottom) */
+.cm-info { margin-top: -60px; padding-bottom: 40px; }
+.cm-info-card {
+  background: white;
+  padding: 35px;
+  text-align: center;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+  transition: 0.3s;
+  height: 100%;
+}
+.cm-info-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12); }
+.cm-info-card i { font-size: 26px; color: #1b66ff; margin-bottom: 15px; display: block; }
+.cm-info-card h5 { font-weight: 700; margin-bottom: 6px; }
+.cm-info-card p  { font-size: 0.9rem; color: #6b7280; margin: 0; }
+
+/* Main form + map */
+.cm-main { padding: 80px 0; }
+
+.cm-form-card {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+.cm-form-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 25px; color: var(--text-dark); }
+.cm-field { margin-bottom: 18px; }
+.cm-field label { display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 6px; }
+.cm-field input,
+.cm-field textarea,
+.cm-field select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease;
+  outline: none;
+}
+.cm-field input:focus,
+.cm-field textarea:focus { border-color: #1b66ff; box-shadow: 0 0 0 3px rgba(27, 102, 255, 0.08); }
+.cm-field textarea { resize: vertical; min-height: 140px; }
+
+.cm-btn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  background: #1b66ff;
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.cm-btn:hover { background: #1555d6; transform: translateY(-2px); }
+
+/* Map */
+.cm-map-card { border-radius: 16px; overflow: hidden; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08); }
+.cm-map-card iframe { display: block; width: 100%; height: 100%; min-height: 300px; border: 0; }
+
+/* ── FOOTER ──────────────────────────────────────────────────── */
+.footer {
+  background: #0b1d33;
+  color: #cbd5e1;
+  padding: 40px 6%;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.footer-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+.footer-logo { color: white; font-size: 18px; margin-bottom: 10px; font-weight: 700; }
+.footer-text { margin-bottom: 15px; font-size: 13px; line-height: 1.5; }
+.footer h3  { color: white; margin-bottom: 15px; font-size: 16px; }
+.footer ul  { list-style: none; padding-left: 0; }
+.footer ul li { margin-bottom: 8px; }
+.footer ul li a { text-decoration: none; color: #cbd5e1; transition: color 0.3s; font-size: 14px; }
+.footer ul li a:hover { color: #3b82f6; }
+.social-icons a { margin-right: 12px; font-size: 16px; color: #cbd5e1; transition: color 0.3s; }
+.social-icons a:hover { color: #3b82f6; }
+.contact-item { display: flex; gap: 10px; margin-bottom: 12px; align-items: flex-start; }
+.contact-item i { color: #3b82f6; margin-top: 3px; font-size: 16px; }
+.footer-bottom {
+  text-align: center;
+  margin-top: 35px;
+  padding-top: 15px;
+  border-top: 1px solid #1e293b;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* ================================================================
+   RESPONSIVE — PAGES
+   ================================================================ */
+@media (max-width: 992px) {
+  .footer-container { grid-template-columns: repeat(2, 1fr); gap: 25px; }
+}
+
+@media (max-width: 768px) {
+  /* Landing banners */
+  .landing { padding: 60px 20px !important; min-height: 220px; }
+  .landing .text-left { margin: 0 !important; }
+  .landing h1 { font-size: 1.8rem !important; }
+  .landing p  { width: 100% !important; font-size: 0.95rem !important; }
+
+  /* Hero (services/contact) */
+  .hero { height: 40vh !important; min-height: 200px; }
+  .hero-content h1 { font-size: 2rem !important; }
+  .hero-content p  { font-size: 0.95rem !important; }
+
+  /* About — story */
+  .story { padding: 40px 20px !important; }
+  .story .row { flex-direction: column; }
+  .story .col-lg-6 { width: 100% !important; }
+  .story .col-lg-6.d-flex.justify-content-end { justify-content: center !important; margin-top: 24px; }
+  .image { width: 100% !important; border-radius: 16px; }
+
+  /* About — values */
+  .values { padding: 40px 20px !important; }
+  .values .row { gap: 0; }
+  .values .card { width: 100% !important; margin: 8px 0 !important; }
+
+  /* About — coaches */
+  .coaches { padding: 40px 20px !important; }
+  .coaches .row { margin-bottom: 32px !important; }
+  .coaches .col-md-6:last-child { display: flex; justify-content: center !important; margin-top: 20px; }
+  .coach-img { width: 100% !important; height: 280px !important; border-radius: 16px !important; }
+
+  /* About — achievements */
+  .achi.p-5 { padding: 40px 20px !important; }
+  .achi .row { flex-direction: column !important; align-items: center !important; margin: 0 !important; }
+  .achi .col-lg-2 { width: 100% !important; max-width: 100%; text-align: center; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.15); }
+  .achi .col-lg-2:last-child { border-bottom: none; }
+  .achi h1 { font-size: 3rem !important; justify-content: center; }
+
+  /* Services — image rows */
+  .values .row.align-items-center { flex-direction: column !important; border-radius: 16px !important; }
+  .values .row.flex-md-row-reverse { flex-direction: column !important; }
+  .values .col-md-6.p-3 { padding: 24px 20px !important; }
+  .service-img-right, .service-img-left {
+    width: 100% !important;
+    height: 220px !important;
+    border-radius: 0 0 16px 16px !important;
+    object-fit: cover;
+  }
+  .values .col-md-6.d-flex { justify-content: center !important; }
+  .values.py-5 .container { padding-left: 16px !important; padding-right: 16px !important; }
+
+  /* Events */
+  .story.d-flex { padding: 40px 20px !important; }
+  .story .col-lg-6.d-flex.justify-content-end { justify-content: center !important; }
+  .coaches.p-5 { padding: 40px 20px !important; }
+  .coaches .row.align-items-center { flex-direction: column !important; margin-bottom: 24px !important; border-radius: 16px !important; }
+  .coaches .row.flex-md-row-reverse { flex-direction: column !important; }
+  .coaches .col-md-6.p-4, .coaches .col-md-6.p-5 { padding: 24px 20px !important; }
+  .coaches .col-md-6.d-flex { justify-content: center !important; }
+  .coaches .coach-img { width: 100% !important; height: 220px !important; border-radius: 0 0 16px 16px !important; }
+  .values.p-5 { padding: 40px 20px !important; }
+  .values .col-lg-5 { flex: 0 0 100%; max-width: 100%; margin: 0 0 24px 0 !important; }
+
+  /* Contact cm- */
+  .cm-hero { padding: 80px 20px 70px; }
+  .cm-title { font-size: 2rem; }
+  .cm-info { margin-top: -40px; }
+  .cm-info-card { padding: 24px; }
+  .cm-main { padding: 48px 0; }
+  .cm-form-card { padding: 28px 20px; }
+
+  /* Footer */
+  .footer-container { grid-template-columns: 1fr; gap: 20px; }
+  .footer { padding: 40px 20px !important; }
+}
+
+@media (max-width: 576px) {
+  .coach-img { height: 240px !important; }
+  .values .col-lg-2 { flex: 0 0 calc(50% - 8px); max-width: calc(50% - 8px); }
+  .coaches .coach-img { height: 200px !important; }
+  .service-img-right, .service-img-left { height: 180px !important; }
+}
+
+@media (max-width: 400px) {
+  .values .col-lg-2 { flex: 0 0 100%; max-width: 100%; }
+}

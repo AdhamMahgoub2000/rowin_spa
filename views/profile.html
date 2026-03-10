@@ -1,0 +1,158 @@
+<div class="dashboard-layout d-flex" ng-controller="ProfileController">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content with-sidebar flex-grow-1">
+    <!-- ── Hero Banner ── -->
+    <section class="pf-hero" ng-if="!loading">
+            <button class="hamburger-btn" ng-click="$emit('toggleSidebar')">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <div class="pf-hero-inner">
+        <!-- Avatar -->
+        <div class="pf-avatar">
+          {{ (profile.name || profile.email || 'R').charAt(0).toUpperCase() }}
+        </div>
+
+        <!-- Identity -->
+        <div class="pf-identity">
+          <h1 class="pf-name">{{ profile.name || profile.email }}</h1>
+          <p class="pf-email">{{ profile.email }}</p>
+          <div class="pf-meta-row">
+            <span
+              class="pf-role-badge"
+              ng-class="{
+    'badge-induction': profile.level === 'induction',
+    'badge-beginner': profile.level === 'beginner',
+    'badge-intermediate': profile.level === 'intermediate',
+    'badge-advanced': profile.level === 'advanced'
+  }"
+            >
+              {{ profile.level || 'Member' }}
+            </span>
+            <span class="pf-meta-chip" ng-if="profile.mobile">
+              <span class="material-symbols-outlined">call</span>
+              {{ profile.mobile }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="pf-stats">
+          <div class="pf-stat">
+            <span class="pf-stat-num">{{ allBookings.length }}</span>
+            <span class="pf-stat-label">Total Sessions</span>
+          </div>
+          <div class="pf-stat pf-stat--accent">
+            <span class="pf-stat-num">{{ upcoming.length }}</span>
+            <span class="pf-stat-label">Upcoming</span>
+          </div>
+          <div class="pf-stat">
+            <span class="pf-stat-num">{{ totalSessionsThisMonth }}</span>
+            <span class="pf-stat-label">This Month</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Loading ── -->
+    <div ng-if="loading" class="pf-loading">
+      <div class="pf-spinner"></div>
+      <p>Loading your profile…</p>
+    </div>
+
+    <!-- ── Content ── -->
+    <div class="pf-body" ng-if="!loading">
+      <!-- Upcoming sessions strip -->
+      <div class="pf-upcoming-strip" ng-if="upcoming.length > 0">
+        <div class="pf-strip-header">
+          <span class="material-symbols-outlined">event_upcoming</span>
+          Next Up
+        </div>
+        <div class="pf-upcoming-cards">
+          <div
+            class="pf-upcoming-card"
+            ng-repeat="b in upcoming | limitTo:3 track by $index"
+          >
+            <div class="pf-upcoming-dot"></div>
+            <div>
+              <div class="pf-upcoming-type">
+                {{ b.session_type || 'Session' }}
+              </div>
+              <div class="pf-upcoming-meta">
+                {{ b.session_date | date:'EEE, MMM d' }} · {{ b.session_time ||
+                '—' }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section header -->
+      <div class="pf-section-header" ng-if="allBookings.length > 0">
+        <h2 class="pf-section-title">
+          <span class="material-symbols-outlined">history</span>
+          All Sessions
+        </h2>
+        <span class="pf-section-count">{{ allBookings.length }} total</span>
+      </div>
+
+      <!-- Sessions grid -->
+      <div class="pf-sessions-grid" ng-if="allBookings.length > 0">
+        <div
+          class="pf-session-card"
+          ng-repeat="b in allBookings track by $index"
+          ng-class="{ 'pf-session-card--upcoming': isUpcoming(b) }"
+          ng-style="{ 'animation-delay': ($index * 50) + 'ms' }"
+        >
+          <!-- Colour accent bar -->
+          <div class="pf-session-bar" ng-class="'pf-bar-' + ($index % 5)"></div>
+
+          <!-- Session icon -->
+          <div class="pf-session-icon" ng-class="'pf-icon-' + ($index % 5)">
+            <span class="material-symbols-outlined">rowing</span>
+          </div>
+
+          <!-- Session info -->
+          <div class="pf-session-info">
+            <div class="pf-session-type">
+              {{ b.session_type || 'Rowing Session' }}
+            </div>
+            <div class="pf-session-date">
+              <span class="material-symbols-outlined">calendar_today</span>
+              {{ b.session_date | date:'EEE, MMM d, yyyy' }}
+            </div>
+            <div class="pf-session-time">
+              <span class="material-symbols-outlined">schedule</span>
+              {{ b.session_time || '—' }}
+            </div>
+          </div>
+
+          <!-- Level badge + status -->
+          <div class="pf-session-right">
+            <span
+              class="pf-status"
+              ng-class="isUpcoming(b) ? 'pf-status--upcoming' : 'pf-status--past'"
+            >
+              {{ isUpcoming(b) ? 'Upcoming' : 'Completed' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div class="pf-empty" ng-if="allBookings.length === 0">
+        <div class="pf-empty-icon-wrap">
+          <span class="material-symbols-outlined">rowing</span>
+        </div>
+        <h3 class="pf-empty-title">No sessions yet</h3>
+        <p class="pf-empty-sub">
+          Ready to hit the water? Book your first session below.
+        </p>
+        <a href="#!/bookings" class="pf-empty-cta">
+          <span class="material-symbols-outlined">add</span>
+          Book a Session
+        </a>
+      </div>
+    </div>
+  </main>
+</div>

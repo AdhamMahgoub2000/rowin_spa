@@ -1,0 +1,94 @@
+/* home-animation.css */
+/* ================================================================
+   HOME PAGE — Animations & Micro-interactions
+   (Note: Base reveal classes [data-rw-reveal] are inherited from base.css)
+================================================================ */
+
+/* ----------------------------------------------------------------
+   CARD STAGGER REVEAL (Triggers when base.css .rw-revealed fires)
+---------------------------------------------------------------- */
+.rw-programs__grid .rw-program-card,
+.rw-testimonials__grid .rw-testimonial {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+[data-rw-reveal].rw-revealed .rw-program-card:nth-child(1),
+[data-rw-reveal].rw-revealed .rw-testimonial:nth-child(1) { transition-delay: 0.1s; opacity: 1; transform: translateY(0); }
+[data-rw-reveal].rw-revealed .rw-program-card:nth-child(2),
+[data-rw-reveal].rw-revealed .rw-testimonial:nth-child(2) { transition-delay: 0.2s; opacity: 1; transform: translateY(0); }
+[data-rw-reveal].rw-revealed .rw-program-card:nth-child(3),
+[data-rw-reveal].rw-revealed .rw-testimonial:nth-child(3) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
+[data-rw-reveal].rw-revealed .rw-program-card:nth-child(4) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); }
+
+/* ----------------------------------------------------------------
+   HOVER EFFECTS & MICRO-INTERACTIONS
+---------------------------------------------------------------- */
+
+/* Buttons */
+.rw-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+.rw-btn--primary:hover {
+  background: rgb(228, 138, 49); /* Slightly darker shade of var(--brand-orange) */
+  box-shadow: 0 12px 24px rgba(248, 158, 69, 0.3);
+}
+.rw-btn--ghost:hover {
+  background: var(--white);
+  color: var(--brand-blue);
+}
+.rw-btn:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* Program Cards: Image Zoom + Link Arrow Move */
+.rw-program-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-5px);
+  transition: var(--transition);
+}
+.rw-program-card:hover .rw-program-card__img {
+  transform: scale(1.08);
+}
+.rw-program-card:hover .rw-link span {
+  transform: translateX(6px);
+}
+
+/* Testimonials Lift */
+.rw-testimonial {
+  transition: var(--transition);
+}
+.rw-testimonial:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Hero Breathing Background Animation */
+.rw-hero__bg {
+  animation: rwHeroZoom 20s linear infinite alternate;
+}
+@keyframes rwHeroZoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1); }
+}
+
+@keyframes rw-scroll-dot {
+  0%   { opacity: 1; top: 6px; }
+  80%  { opacity: 0; top: 20px; }
+  100% { opacity: 0; top: 6px; }
+}
+
+/* ----------------------------------------------------------------
+   ACCESSIBILITY: Reduced Motion
+---------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

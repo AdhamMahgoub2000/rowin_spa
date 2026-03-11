@@ -422,7 +422,7 @@ app-sidebar { display: block; width: 0; flex-shrink: 0; }
   .sidebar-ham-line--open-top { transform: translateY(7px) rotate(45deg); }
   .sidebar-ham-line--open-mid { opacity: 0; width: 0; }
   .sidebar-ham-line--open-bot { transform: translateY(-7px) rotate(-45deg); }
-}
+
 /* ================================================================
    DASHBOARD — Overview Page
    Extends: dashboard.css (sidebar/layout), customers.css (cards/badges)

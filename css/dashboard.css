@@ -372,24 +372,24 @@ app-sidebar { display: block; width: 0; flex-shrink: 0; }
   .sidebar-close-btn { display: none; }
 }
 
-@media (max-width: 1024px) {
-  .sidebar-close-btn { display: none; }
+.sidebar-hamburger,
+.sidebar-hamburger:not([disabled]) {
+  display: none;
+}
 
-  .sidebar-hamburger {
-    display: flex;
+@media (max-width: 1024px) {
+  button.sidebar-hamburger {
+    display: flex !important;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 5px;
-
-    /* Fixed so it floats over the hero regardless of sidebar state */
-    position: fixed;
+    position: fixed !important;
     top: 18px;
     left: 18px;
-    z-index: 1001; /* above sidebar (1000) so it's always clickable */
-
-    width: 42px;
-    height: 42px;
+    z-index: 1001;
+    width: 42px !important;
+    height: 42px !important;
     background: rgba(15, 23, 42, 0.55);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
@@ -399,7 +399,7 @@ app-sidebar { display: block; width: 0; flex-shrink: 0; }
     padding: 4px;
     transition: background .2s, box-shadow .2s;
   }
-
+}
   .sidebar-hamburger:hover {
     background: rgba(37, 99, 235, 0.7);
     box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);

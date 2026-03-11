@@ -55,11 +55,10 @@
 
   <body ng-cloak>
     <!-- Navbar: hidden on admin/dashboard routes -->
-    <navbar-directive
-      ng-if="!isAdminRoute"
-    ></navbar-directive>
-    <side-bar-directive ng-if="isAdminRoute"></side-bar-directive>
-
+    <navbar-directive ng-if="!isAdminRoute"></navbar-directive>
+    <aside class="sidebar" ng-if="isAdminRoute">
+      <app-sidebar></app-sidebar>
+    </aside>
     <!-- Angular View -->
     <div ng-view></div>
 

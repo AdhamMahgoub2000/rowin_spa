@@ -4,7 +4,7 @@ angular.module('rowinApp')
   function (SupabaseService, $scope, $location, $routeParams) {
 
     const client = SupabaseService.client;
-    
+    $scope.isAdminRoute = $location.path().includes('/myprofile') ? false : true;
     /* ── State ── */
     $scope.loading                = true;
     $scope.profile                = {};

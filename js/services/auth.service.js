@@ -1,6 +1,6 @@
 angular.module("rowinApp")
-  .service("AuthService", ['SupabaseService', '$rootScope', '$location', 
-    function(SupabaseService, $rootScope, $location) {
+  .service("AuthService", ['SupabaseService', '$rootScope', '$location', '$route',
+    function(SupabaseService, $rootScope, $location, $route) {
 
       const client = SupabaseService.client;
 
@@ -49,9 +49,10 @@ angular.module("rowinApp")
           await client.auth.signOut();
           // Broadcast event for controllers to clear user state if needed
           $rootScope.$broadcast('user:loggedOut');
-
+          $rootScope.authReady = false;
+          $rootScope.currentUser = null;
           // Navigate client-side without full page reload
-          $location.path('/'); 
+          $route.reload();
           // Trigger digest cycle to update views
           $rootScope.$applyAsync();
         } catch (error) {

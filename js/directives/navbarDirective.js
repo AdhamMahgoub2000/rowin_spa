@@ -118,7 +118,7 @@ angular.module("rowinApp")
           <i class="fa-solid fa-chevron-down rw-nav__chevron" ng-class="{'rw-nav__chevron--open': userMenuOpen}"></i>
         </button>
         <div class="rw-nav__dropdown" ng-show="userMenuOpen" ng-mousedown="$event.preventDefault()">
-          <a class="rw-nav__dropdown-item" ng-href="{{isAdmin ? '#!/dashboard' : '#!/profile'}}" ng-click="userMenuOpen = false">
+          <a class="rw-nav__dropdown-item" ng-href="{{isAdmin ? '#!/dashboard' : '#!/myprofile'}}" ng-click="userMenuOpen = false">
             <i class="fa-solid" ng-class="isAdmin ? 'fa-gauge' : 'fa-user'"></i>
             {{isAdmin ? 'Dashboard' : 'My Profile'}}
           </a>
@@ -159,13 +159,13 @@ angular.module("rowinApp")
       <a href="#!/"         class="rw-nav__mobile-link" ng-class="{'rw-nav__mobile-link--active': isActive('/')}"         ng-click="closeMenu()">Home</a>
       <a href="#!/services" class="rw-nav__mobile-link" ng-class="{'rw-nav__mobile-link--active': isActive('/services')}" ng-click="closeMenu()">Services</a>
       <a href="#!/events"   class="rw-nav__mobile-link" ng-class="{'rw-nav__mobile-link--active': isActive('/events')}"   ng-click="closeMenu()">Events</a>
-      <a href="#!/bookings" class="rw-nav__mobile-link" ng-class="{'rw-nav__mobile-link--active': isActive('/bookings')}" ng-click="closeMenu()">Bookings</a>
+      <a href="#!/booking" class="rw-nav__mobile-link" ng-class="{'rw-nav__mobile-link--active': isActive('/bookings')}" ng-click="closeMenu()">Bookings</a>
       <a href="#!/about"    class="rw-nav__mobile-link" ng-class="{'rw-nav__mobile-link--active': isActive('/about')}"    ng-click="closeMenu()">About</a>
       <a href="#!/contact"  class="rw-nav__mobile-link" ng-class="{'rw-nav__mobile-link--active': isActive('/contact')}"  ng-click="closeMenu()">Contact</a>
     </nav>
     <div class="rw-nav__mobile-auth" ng-if="authChecked">
       <div ng-if="isLoggedIn">
-        <a ng-href="{{isAdmin ? '#!/dashboard' : '#!/profile'}}" class="rw-nav__mobile-profile" ng-click="closeMenu()">
+        <a ng-href="{{isAdmin ? '#!/dashboard' : '#!/myprofile'}}" class="rw-nav__mobile-profile" ng-click="closeMenu()">
           <span class="rw-nav__user-avatar">{{userName.charAt(0).toUpperCase()}}</span>
           <div>
             <strong>{{userName}}</strong>

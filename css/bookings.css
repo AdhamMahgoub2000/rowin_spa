@@ -2,9 +2,12 @@
    BOOKINGS PAGE — multi-step form
    ================================================================ */
 
-.booking-section { padding: 60px 16px; min-height: 70vh; }
+.booking-section { padding: 60px 16px; min-height: 70vh; 
+  background: linear-gradient(rgba(20, 38, 110, 0.82), rgba(34, 56, 145, 0.82)),
+              url('../images/cover3.jpeg') center/cover no-repeat;}
 
 .booking-card {
+  margin-top:50px ;
   border-radius: 15px;
   padding: 40px;
   background: white;

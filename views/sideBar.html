@@ -1,17 +1,24 @@
+<!-- Hamburger — fixed position, outside <aside> so it's always visible on mobile -->
+<button
+  class="sidebar-hamburger"
+  ng-click="toggleSidebar()"
+  aria-label="Toggle menu"
+>
+  <span
+    class="sidebar-ham-line"
+    ng-class="{'sidebar-ham-line--open-top': sidebarOpen}"
+  ></span>
+  <span
+    class="sidebar-ham-line"
+    ng-class="{'sidebar-ham-line--open-mid': sidebarOpen}"
+  ></span>
+  <span
+    class="sidebar-ham-line"
+    ng-class="{'sidebar-ham-line--open-bot': sidebarOpen}"
+  ></span>
+</button>
+
 <aside class="sidebar" ng-class="{'sidebar-open': sidebarOpen}">
-
-  <!-- Hamburger (matches navbar style, calls sidebar toggle) -->
-  <button class="sidebar-hamburger" ng-click="$emit('toggleSidebar')" aria-label="Toggle menu">
-    <span class="sidebar-ham-line sidebar-ham-line--top"  ng-class="{'sidebar-ham-line--open-top':  sidebarOpen}"></span>
-    <span class="sidebar-ham-line sidebar-ham-line--mid"  ng-class="{'sidebar-ham-line--open-mid':  sidebarOpen}"></span>
-    <span class="sidebar-ham-line sidebar-ham-line--bot"  ng-class="{'sidebar-ham-line--open-bot':  sidebarOpen}"></span>
-  </button>
-
-  <!-- Close button (mobile/tablet only) -->
-  <button class="sidebar-close-btn" ng-click="closeSidebar()">
-    <span class="material-symbols-outlined">close</span>
-  </button>
-
   <!-- Brand -->
   <div class="sidebar-brand">
     <div class="d-flex align-items-center gap-3">
@@ -40,12 +47,13 @@
 
   <!-- Footer CTA -->
   <div class="sidebar-footer">
-    <button class="btn-new-sale" ng-click="goHome()">
-      Back to Home
-    </button>
+    <button class="btn-new-sale" ng-click="goHome()">Back to Home</button>
   </div>
-
 </aside>
 
 <!-- Backdrop (mobile/tablet overlay) -->
-<div class="sidebar-backdrop" ng-show="sidebarOpen" ng-click="closeSidebar()"></div>
+<div
+  class="sidebar-backdrop"
+  ng-show="sidebarOpen"
+  ng-click="closeSidebar()"
+></div>

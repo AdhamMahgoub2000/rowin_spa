@@ -1,12 +1,20 @@
 <div class="dashboard-layout d-flex" ng-controller="ProfileController">
+  <aside class="sidebar" ng-if="isAdminRoute">
   <app-sidebar></app-sidebar>
 
-  <main class="main-content with-sidebar flex-grow-1">
+  </aside>
+  <main class="main-content flex-grow-1" ng-class="{'with-sidebar': isAdminRoute}">
     <!-- ── Hero Banner ── -->
     <section class="pf-hero" ng-if="!loading">
-            <button class="hamburger-btn" ng-click="$emit('toggleSidebar')">
-        <span class="material-symbols-outlined">menu</span>
-      </button>
+      <div>
+        <button
+          class="hamburger-btn"
+          
+          ng-click="$emit('toggleSidebar')"
+        >
+          <span class="material-symbols-outlined" ng-show="isAdminRoute">menu</span>
+        </button>
+      </div>
       <div class="pf-hero-inner">
         <!-- Avatar -->
         <div class="pf-avatar">

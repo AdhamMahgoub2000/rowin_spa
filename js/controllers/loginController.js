@@ -1,5 +1,12 @@
 angular.module("rowinApp")
-.controller("loginController", function ($scope, $timeout, $location, AuthService) {
+.controller("loginController", [
+    '$scope',
+    '$timeout',
+    '$rootScope',
+    '$location',
+    'AuthService',
+    '$route',
+function ($scope, $timeout, $rootScope, $location, AuthService, $route) {
 
   $scope.user = {};
   $scope.resetData = {};
@@ -15,25 +22,61 @@ angular.module("rowinApp")
   const params = new URLSearchParams(hashSearch);
   const redirectPath = params.get("redirect") || "/";
 
-  $scope.login = async function () {
-    if ($scope.loginForm.$invalid) return;
+ $scope.login = async function () {
 
-    $scope.loading = true;
-    $scope.loginError = null;
+  if ($scope.loginForm.$invalid) return;
 
-    const { data, error } = await AuthService.login($scope.user.email, $scope.user.password);
+  $scope.loading = true;
+  $scope.loginError = null;
 
-    $scope.$apply(() => {
-      $scope.loading = false;
+  try {
 
-      if (error) {
-        $scope.loginError = error.message || "Login failed. Please try again.";
-        return;
-      }
+    const { data, error } = await AuthService.login(
+      $scope.user.email,
+      $scope.user.password
+    );
 
-      $location.path(redirectPath);
-    });
-  };
+    $scope.loading = false;
+
+    if (error) {
+      $scope.loginError = error.message || "Login failed. Please try again.";
+      $scope.$applyAsync();
+      return;
+    }
+
+    // Fetch profile (for role, fname, etc.)
+    const profile = await AuthService.getProfile(data.user.id);
+
+    $rootScope.currentUser = {
+      id: data.user.id,
+      email: data.user.email,
+      fname: profile?.fname,
+      lname: profile?.lname,
+      role: profile?.role
+    };
+
+    $rootScope.authReady = true;
+
+    // Redirect based on role
+    if (profile?.role === "admin") {
+      $location.path("/dashboard");
+    } else {
+      $location.path("/");
+    }
+
+    $route.reload();
+
+    $scope.$applyAsync();
+
+  } catch (err) {
+
+    $scope.loading = false;
+    $scope.loginError = "Unexpected error occurred.";
+    $scope.$applyAsync();
+
+  }
+
+};
 
   $scope.resetPassword = async function () {
     if ($scope.resetForm.$invalid) return;
@@ -63,4 +106,4 @@ angular.module("rowinApp")
     });
   };
 
-});
+}]);

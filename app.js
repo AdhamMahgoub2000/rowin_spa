@@ -45,7 +45,7 @@ app.config(["$routeProvider", function ($routeProvider) {
       controller: "registerController",
       title: "Register - Rowin Academy"
     })
-    .when("/profile", {
+    .when("/myprofile", {
       templateUrl: "views/profile.html",
       title: "My Profile - Rowin Academy",
       controller: "ProfileController"
@@ -94,21 +94,72 @@ app.config(["$routeProvider", function ($routeProvider) {
 }]);
 
 // ─── Update page title + scroll to top on every route change ─────────────────
-app.run(["$rootScope", "$route", function ($rootScope, $route) {
-  $rootScope.$on("$routeChangeSuccess", function () {
-    const route = $route.current;
-    document.title = (route && route.title) ? route.title : "Rowin Academy";
-    window.scrollTo(0, 0);
+app.run(['$rootScope', '$location','$route', 'AuthService',
+function($rootScope, $location, $route, AuthService) {
 
-    // Hide navbar + footer on admin/dashboard routes
-    const adminRoutes = [
-      '/dashboard', '/medicines', '/customers', '/invoices', '/contact-requests','/bookingsAdmin','/profile/:id'
-    ];
-    const commonRoutes = ['/profile'];
-    const path = route && route.$$route ? route.$$route.originalPath : '/';
-    $rootScope.isAdminRoute = adminRoutes.includes(path);
-    $rootScope.isCommonRoute = commonRoutes.includes(path);
-  });
+const adminRoutes = [
+  '/dashboard','/medicines','/customers','/invoices',
+  '/contact-requests','/bookingsAdmin','/profile/:id'
+];
+
+$rootScope.authReady = false;
+$rootScope.currentUser = null;
+
+AuthService.verifySession().then(async function(result) {
+
+    if (result.session) {
+        const data = await AuthService.getProfile(result.session.user.id);
+
+        $rootScope.currentUser = data ? {
+            id: result.session.user.id,
+            fname: data.fname,
+            lname: data.lname,
+            email: data.email,
+            phone: data.phone,
+            address: data.address,
+            role: data.role
+        } : null;
+
+    } else {
+        $rootScope.currentUser = null;
+    }
+
+    $rootScope.authReady = true;
+    $route.reload();
+
+});
+
+$rootScope.$on('$routeChangeStart', function(event) {
+
+if (!$rootScope.authReady && adminRoutes.includes($location.path())) {
+    event.preventDefault();
+    return;
+}
+
+    const user = $rootScope.currentUser;
+    const path = $location.path();
+
+  $rootScope.isAdminRoute = adminRoutes.some(route => {
+    if (route.includes(':')) {
+        // check prefix before dynamic param
+        return path.startsWith(route.split('/:')[0]);
+    }
+    return route === path;
+});
+
+    if (!user && adminRoutes.includes(path)) {
+        event.preventDefault();
+        $location.path('/login');
+        return;
+    }
+
+    if (user && path === '/login') {
+        event.preventDefault();
+        $location.path(user.role === 'admin' ? '/dashboard' : '/');
+    }
+
+});
+
 }]);
 
 // ─── Capitalize filter ────────────────────────────────────────────────────────
